@@ -1,0 +1,6 @@
+diffusers[training]
+dataclasses
+jupyterlab
+matplotlib
+torchvision
+torch

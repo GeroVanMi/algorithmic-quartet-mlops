@@ -1,0 +1,11 @@
+# Data and Model Checkpoints
+data/
+models/
+
+# IntelliJ IDEs
+.idea/
+
+# Python-specific 
+venv/
+__pycache__/
+.ipynb_checkpoints/
