@@ -1,6 +1,9 @@
 name: training
 run-name: Training Run
-on: [push]
+on:
+  push:
+    tags:
+      - "run_training"
 jobs:
   train-model:
     runs-on: ubuntu-latest
@@ -9,4 +12,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+          cache: "pip" # caching pip dependencies
       - run: pip install -r training/requirements.txt
