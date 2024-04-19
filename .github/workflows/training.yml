@@ -3,7 +3,7 @@ run-name: Training Run
 on:
   push:
     tags:
-      - "run_training"
+      - "train/*"
 jobs:
   train-model:
     runs-on: ubuntu-latest
