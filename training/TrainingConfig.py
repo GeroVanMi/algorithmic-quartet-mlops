@@ -13,7 +13,7 @@ class TrainingConfig:
     save_image_epochs = 10
     save_model_epochs = 30
     mixed_precision = "fp16"  # `no` for float32, `fp16` for automatic mixed precision
-    dataset_name = "huggan/smithsonian_butterflies_subset"
+    dataset_name = "./data/" # change it to the the local data ?"huggan/smithsonian_butterflies_subset"
     output_dir = (
         "models/ddpm-butterflies-128"  # the model name locally and on the HF Hub
     )
