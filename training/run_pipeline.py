@@ -4,16 +4,22 @@ from datasets import load_dataset
 from diffusers.models.unets.unet_2d import UNet2DModel
 from diffusers.optimization import get_cosine_schedule_with_warmup
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
+from load_bucket import download_bucket_with_transfer_manager
 from torch.utils.data.dataloader import DataLoader
 from torchvision import transforms
-
 from train import train_loop
 from TrainingConfig import TrainingConfig
 
 
 def run_pipeline():
     config = TrainingConfig()
-    dataset = load_dataset(config.dataset_name, split="train[10:20]")
+
+    if not config.local_dataset_path.exists():
+        download_bucket_with_transfer_manager(config.training_bucket_name)
+
+    dataset = load_dataset(
+        str(config.local_dataset_path.resolve()), split="train[10:20]"
+    )
 
     preprocess = transforms.Compose(
         [
