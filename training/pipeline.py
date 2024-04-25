@@ -1,5 +1,6 @@
 import torch
-from accelerate import Accelerator
+from configurations.DevConfig import DevConfig
+from configurations.TrainConfig import TrainConfig
 from datasets import load_dataset
 from diffusers.models.unets.unet_2d import UNet2DModel
 from diffusers.optimization import get_cosine_schedule_with_warmup
@@ -8,11 +9,15 @@ from load_bucket import download_bucket_with_transfer_manager
 from torch.utils.data.dataloader import DataLoader
 from torchvision import transforms
 from train import train_loop
-from TrainingConfig import TrainingConfig
 
 
 def run_pipeline():
-    config = TrainingConfig()
+    # TODO: This needs to be set through CLI arguments
+    is_dev = True
+    if is_dev:
+        config = DevConfig()
+    else:
+        config = TrainConfig()
 
     if not config.local_dataset_path.exists():
         download_bucket_with_transfer_manager(config.training_bucket_name)
@@ -77,11 +82,12 @@ def run_pipeline():
         num_warmup_steps=config.lr_warmup_steps,
         num_training_steps=(len(train_dataloader) * config.num_epochs),
     )
-    accelerator = Accelerator()
-    model, optimizer, train_dataloader = accelerator.prepare(
-        model, optimizer, train_dataloader
-    )
+    # accelerator = Accelerator()
+    # model, optimizer, train_dataloader = accelerator.prepare(
+    #     model, optimizer, train_dataloader
+    # )
 
+    print("Start training...")
     train_loop(
         config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler
     )

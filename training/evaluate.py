@@ -1,12 +1,11 @@
 import os
 
 import torch
+from configurations.Configuration import Configuration
 from diffusers.utils.pil_utils import make_image_grid
 
-from TrainingConfig import TrainingConfig
 
-
-def evaluate(config: TrainingConfig, epoch, pipeline):
+def evaluate(config: Configuration, epoch, pipeline):
     # Sample some images from random noise (this is the backward diffusion process).
     # The default pipeline output type is `List[PIL.Image]`
     images = pipeline(

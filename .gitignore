@@ -1,6 +1,7 @@
 # Data and Model Checkpoints
 data/
 models/
+gc.json
 
 # IntelliJ IDEs
 .idea/
