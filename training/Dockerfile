@@ -1,4 +1,4 @@
-FROM "pytorch/pytorch"
+FROM pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime
 
 # Install gcloud CLI 
 RUN apt update -y
@@ -8,5 +8,8 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
 WORKDIR /root
 
 ADD ./requirements.txt /root/requirements.txt
+# We really want to re-use the libraries here
+# RUN python3 -m venv /root/venv/
+# RUN source /root/venv/bin/activate
 RUN pip install -r requirements.txt
 ADD . /root
