@@ -1,7 +1,7 @@
 # Data and Model Checkpoints
 data/
 models/
-
+frontend/.streamlit/secrets.toml
 # IntelliJ IDEs
 .idea/
 
