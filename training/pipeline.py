@@ -1,4 +1,7 @@
+import argparse
+
 import torch
+from configurations.Configuration import Configuration
 from configurations.DevConfig import DevConfig
 from configurations.TrainConfig import TrainConfig
 from datasets import load_dataset
@@ -11,14 +14,7 @@ from torchvision import transforms
 from train import train_loop
 
 
-def run_pipeline():
-    # TODO: This needs to be set through CLI arguments
-    is_dev = True
-    if is_dev:
-        config = DevConfig()
-    else:
-        config = TrainConfig()
-
+def run_pipeline(config: Configuration):
     if not config.local_dataset_path.exists():
         download_bucket_with_transfer_manager(config.training_bucket_name)
 
@@ -93,5 +89,20 @@ def run_pipeline():
     )
 
 
+def create_config_from_arguments() -> Configuration:
+    parser = argparse.ArgumentParser(
+        prog="Pokemon Training Loop",
+        description="Trains a model to create new images.",
+    )
+    parser.add_argument("-t", "--train", action="store_true")
+    args = parser.parse_args()
+    if args.train:
+        return TrainConfig()
+
+    return DevConfig()
+
+
 if __name__ == "__main__":
-    run_pipeline()
+    config = create_config_from_arguments()
+
+    run_pipeline(config)

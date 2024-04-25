@@ -9,8 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: "google-github-actions/auth@v2"
         with:
-          python-version: "3.11"
-          cache: "pip" # caching pip dependencies
-      - run: pip install -r training/requirements.txt
+        credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}" # Replace with the name of your GitHub Actions secret
+      # - uses: actions/setup-python@v5
+      #   with:
+      #     python-version: "3.11"
+      #     cache: "pip" # caching pip dependencies
+      # - run: pip install -r training/requirements.txt
+      - run: echo "${{ secrets.GOOGLE_CREDENTIALS }}" | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev
+      - run: docker build -t europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer training/
+      - run: docker push europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest

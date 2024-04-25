@@ -2,7 +2,10 @@
 data/
 models/
 frontend/.streamlit/secrets.toml
-gc.json
+
+# Cloud authentication keys
+keys/
+gha-creds-*.json
 
 # IntelliJ IDEs
 .idea/
