@@ -17,6 +17,6 @@ jobs:
       #     python-version: "3.11"
       #     cache: "pip" # caching pip dependencies
       # - run: pip install -r training/requirements.txt
-      - run: echo ${{ secrets.ARTIFACT_REGISTRY_ACCOUNT }} | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev
+      - run: echo "${{ secrets.ARTIFACT_REGISTRY_ACCOUNT }}" | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev
       - run: docker build -t europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer training/
       - run: docker push europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
