@@ -15,7 +15,7 @@ class Configuration:
     local_dataset_path = Path("./data/")
     training_bucket_name = "zhaw_algorithmic_quartet_training_images"
 
-    output_dir = "ddpm-pokemon-128"  # the model name locally and on the HF Hub
+    output_dir = "./models/ddpm-pokemon-128"
 
     push_to_hub = False  # whether to upload the saved model to the HF Hub
     hub_private_repo = False
