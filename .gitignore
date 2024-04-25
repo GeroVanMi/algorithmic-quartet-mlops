@@ -2,6 +2,8 @@
 data/
 models/
 frontend/.streamlit/secrets.toml
+gc.json
+
 # IntelliJ IDEs
 .idea/
 
