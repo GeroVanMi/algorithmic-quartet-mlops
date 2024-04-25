@@ -1,8 +1,8 @@
-FROM pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime
-
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04
 # Install gcloud CLI 
 RUN apt update -y
 RUN apt install apt-transport-https ca-certificates gnupg curl -y
+RUN apt install python3 python3-pip -y
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && apt update -y && apt install google-cloud-sdk -y
 
 WORKDIR /root
