@@ -33,6 +33,6 @@ def display_images():
     st.image(images, width=300)  # Display images with ratings
 
 
-# Button to generate and rate images
+# Button to generate / model call! TODO How to call our model?
 if st.button('Generate'):
     st.write_stream(display_images())
