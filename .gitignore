@@ -1,7 +1,7 @@
 # Data and Model Checkpoints
 data/
 models/
-
+frontend/.streamlit
 # IntelliJ IDEs
 .idea/
 
