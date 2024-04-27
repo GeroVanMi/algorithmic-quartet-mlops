@@ -2,7 +2,6 @@ import streamlit as st
 import gcsfs
 import time
 import random
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 st.set_page_config(
     page_title="Pokemon Generator",
@@ -19,15 +18,7 @@ fs = gcsfs.GCSFileSystem(project='algorithmic-quartet')
 # Set the path to the directory containing the images
 directory_path = 'zhaw_algorithmic_quartet_training_images'
 
-tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
-model = GPT2LMHeadModel.from_pretrained('gpt2')
-def generate_text(prompt):
-    inputs = tokenizer.encode(prompt, return_tensors='pt')
-    outputs = model.generate(inputs, max_length=20, num_return_sequences=1)
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-text = generate_text("Pokemons are great")
-
+text = "Wow look at these pokemon!"
 def text_stream(text):
     for word in text.split(" "):
         yield word + " "
