@@ -1,16 +1,24 @@
 name: training
-run-name: Training Run
+run-name: Build and Test Training Pipeline
 on:
   push:
     tags:
       - "train/*"
 jobs:
-  train-model:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip" # caching pip dependencies
-      - run: pip install -r training/requirements.txt
+      - name: "Install lightning sdk"
+        run: "pip install -r ./ci/requirements.txt"
+      - name: "Start Lightning Studio and pull code"
+        run: "python ./ci/start_studio.py"
+        env: # the following values are parsed from the repository secrets
+          LIGHTNING_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
+          LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}

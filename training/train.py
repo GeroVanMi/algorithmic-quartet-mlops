@@ -4,15 +4,20 @@ from pathlib import Path
 import torch
 import torch.nn.functional as F
 from accelerate import Accelerator
+from configurations.Configuration import Configuration
 from diffusers.pipelines.ddpm.pipeline_ddpm import DDPMPipeline
+from evaluate import evaluate
 from huggingface_hub import create_repo, upload_folder
 from tqdm.auto import tqdm
 
-from evaluate import evaluate
-
 
 def train_loop(
-    config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler
+    config: Configuration,
+    model,
+    noise_scheduler,
+    optimizer,
+    train_dataloader,
+    lr_scheduler,
 ):
     # Initialize accelerator and tensorboard logging
     accelerator = Accelerator(

@@ -1,19 +1,41 @@
+import argparse
+
 import torch
-from accelerate import Accelerator
+from configurations.Configuration import Configuration
+from configurations.DevConfig import DevConfig
+from configurations.TrainConfig import TrainConfig
+from data_utilities.load_bucket import download_bucket_with_transfer_manager
 from datasets import load_dataset
 from diffusers.models.unets.unet_2d import UNet2DModel
 from diffusers.optimization import get_cosine_schedule_with_warmup
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 from torch.utils.data.dataloader import DataLoader
 from torchvision import transforms
-
 from train import train_loop
-from TrainingConfig import TrainingConfig
 
 
-def run_pipeline():
-    config = TrainingConfig()
-    dataset = load_dataset(config.dataset_name, split="train[10:20]")
+def prepare_data(config: Configuration):
+    if isinstance(config, DevConfig):
+        print("Testing Training pipeline. This will not train the model!")
+        print("In order to train the model, pass the -t or --training flag!")
+
+        if not config.local_dataset_path.exists():
+            download_bucket_with_transfer_manager(
+                config.training_bucket_name, max_results=config.num_images
+            )
+
+        return load_dataset(
+            str(config.local_dataset_path.resolve()), split="train[0:6]"
+        )
+
+    if not config.local_dataset_path.exists():
+        download_bucket_with_transfer_manager(config.training_bucket_name)
+
+        return load_dataset(str(config.local_dataset_path.resolve()))
+
+
+def run_pipeline(config: Configuration):
+    dataset = prepare_data(config)
 
     preprocess = transforms.Compose(
         [
@@ -28,10 +50,12 @@ def run_pipeline():
         images = [preprocess(image.convert("RGB")) for image in examples["image"]]
         return {"images": images}
 
-    dataset.set_transform(transform)
+    dataset.set_transform(transform)  # type: ignore Type definitions are incorrect
 
     train_dataloader = DataLoader(
-        dataset, batch_size=config.train_batch_size, shuffle=True
+        dataset,  # type: ignore Type definitions are incorrect
+        batch_size=config.train_batch_size,
+        shuffle=True,
     )
     model = UNet2DModel(
         sample_size=config.image_size,  # the target image resolution
@@ -71,15 +95,25 @@ def run_pipeline():
         num_warmup_steps=config.lr_warmup_steps,
         num_training_steps=(len(train_dataloader) * config.num_epochs),
     )
-    accelerator = Accelerator()
-    model, optimizer, train_dataloader = accelerator.prepare(
-        model, optimizer, train_dataloader
-    )
 
     train_loop(
         config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler
     )
 
 
+def create_config_from_arguments() -> Configuration:
+    parser = argparse.ArgumentParser(
+        prog="Pokemon Training Loop",
+        description="Trains a model to create new images.",
+    )
+    parser.add_argument("-t", "--train", action="store_true")
+    args = parser.parse_args()
+    if args.train:
+        return TrainConfig()
+
+    return DevConfig()
+
+
 if __name__ == "__main__":
-    run_pipeline()
+    config = create_config_from_arguments()
+    run_pipeline(config)
