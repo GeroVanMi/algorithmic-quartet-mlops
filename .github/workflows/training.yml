@@ -19,8 +19,9 @@ jobs:
           username: _json_key_base64
           password: ${{ secrets.ARTIFACT_REGISTRY_ACCOUNT }}
       - name: Build and export
-        run: docker build --output type=tar,dest=/tmp/pokemon-trainer.tar -t europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer training/
-        run: docker push europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
+        run: |
+          docker build --output type=tar,dest=/tmp/pokemon-trainer.tar -t europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer training/
+          docker push europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
       - name: Upload artifact locally
         uses: actions/upload-artifact@v3
         with:
