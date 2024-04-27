@@ -20,5 +20,5 @@ jobs:
       - name: "Start Lightning Studio and pull code"
         run: "python ./ci/start_studio.py"
         env: # the following values are parsed from the repository secrets
-        LIGHTNING_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
-        LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
+          LIGHTNING_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
+          LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
