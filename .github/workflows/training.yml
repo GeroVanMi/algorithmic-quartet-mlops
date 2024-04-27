@@ -11,36 +11,14 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Google Artifact Registry
-        uses: docker/login-action@v3
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
         with:
-          registry: https://europe-west9-docker.pkg.dev
-          username: _json_key_base64
-          password: ${{ secrets.ARTIFACT_REGISTRY_ACCOUNT }}
-
-      - name: Build and export
-        uses: docker/build-push-action@v5
-        with:
-          context: training/
-          tags: europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-      - name: Login to Google Artifact Registry
-        uses: docker/login-action@v3
-        with:
-          registry: https://europe-west9-docker.pkg.dev
-          username: _json_key_base64
-          password: ${{ secrets.ARTIFACT_REGISTRY_ACCOUNT }}
-
-      - name: Run pipeline in testing mode
-        run: |
-          docker run europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
+          python-version: "3.11"
+      - name: "Install lightning sdk"
+        run: "pip install ./ci/requirements.txt"
+      - name: "Start Lightning Studio and pull code"
+        run: "python ./ci/start_studio.py"
+        env: # the following values are parsed from the repository secrets
+        LIGHTNING_USER_ID: ${{ secrets.LIGHTNING_USER_ID }}
+        LIGHTNING_API_KEY: ${{ secrets.LIGHTNING_API_KEY }}
