@@ -6,6 +6,7 @@ frontend/.streamlit/secrets.toml
 # Cloud authentication keys
 keys/
 gha-creds-*.json
+.env
 
 # IntelliJ IDEs
 .idea/
