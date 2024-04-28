@@ -1,0 +1,12 @@
+method: bayes, grid, random
+metric:
+  name: loss
+  goal: minimize
+parameters:
+  learning_rate:
+    distribution: uniform
+    min: 0.001
+    max: 0.1
+  batch_size:
+    values: [16, 32, 64]
+    epochs: 100
