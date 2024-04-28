@@ -2,8 +2,8 @@ import argparse
 
 import torch
 from configurations.Configuration import Configuration
+from configurations.create_config import create_config_from_arguments
 from configurations.DevConfig import DevConfig
-from configurations.TrainConfig import TrainConfig
 from data_utilities.load_bucket import download_bucket_with_transfer_manager
 from datasets import load_dataset
 from diffusers.models.unets.unet_2d import UNet2DModel
@@ -99,19 +99,6 @@ def run_pipeline(config: Configuration):
     train_loop(
         config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler
     )
-
-
-def create_config_from_arguments() -> Configuration:
-    parser = argparse.ArgumentParser(
-        prog="Pokemon Training Loop",
-        description="Trains a model to create new images.",
-    )
-    parser.add_argument("-t", "--train", action="store_true")
-    args = parser.parse_args()
-    if args.train:
-        return TrainConfig()
-
-    return DevConfig()
 
 
 if __name__ == "__main__":
