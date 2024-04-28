@@ -24,7 +24,7 @@ jobs:
       - name: "Install lightning sdk"
         run: "pip install -r ./ci/requirements.txt"
       - name: "Start training job on Lightning studio"
-        run: "python ./ci/run_pipeline.py"
+        run: "python ./ci/start_lightning_job.py"
       - name: "Stop Lightning Studio"
         if: always()
         run: "python ./ci/shutdown_studio.py"
