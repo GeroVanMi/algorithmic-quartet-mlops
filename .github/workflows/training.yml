@@ -1,5 +1,5 @@
 name: Training
-run-name: Build and Test Training Pipeline
+run-name: Train a new model on Lightning.ai
 on:
   push:
     tags:

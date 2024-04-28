@@ -10,5 +10,5 @@ if __name__ == "__main__":
     jobs_plugin = studio.installed_plugins["jobs"]
 
     print("Starting pipeline test.")
-    cmd = f"cd algorithmic-quaretet-mlops/training && python pipeline.py"
+    cmd = f"cd /teamspace/studios/this_studio/algorithmic-quartet-mlops/training && python pipeline.py"
     jobs_plugin.run(cmd, name="Testing pipeline for errors", machine=Machine.CPU)  # type: ignore
