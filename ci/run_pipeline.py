@@ -15,6 +15,6 @@ if __name__ == "__main__":
     # use the jobs plugin
     jobs_plugin = studio.installed_plugins["jobs"]
 
-    print("Pulling newest code from git.")
-    cmd = f"cd algorithmic-quartet-mlops && git pull"
-    jobs_plugin.run(cmd, name="Pulling the newest code", machine=Machine.CPU)  # type: ignore
+    # Start the training script
+    cmd = f"bash /teamspace/studios/this_studio/algorithmic-quartet-mlops/ci/lightning_run_pipeline.sh"
+    jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
