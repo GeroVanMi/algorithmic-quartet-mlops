@@ -23,10 +23,8 @@ jobs:
           python-version: "3.11"
       - name: "Install lightning sdk"
         run: "pip install -r ./ci/requirements.txt"
-      - name: "Start Lightning Studio and pull code"
-        run: "python ./ci/start_studio.py"
-      - name: "Testing pipeline on CPU"
-        run: "python ./ci/test_pipeline.py"
+      - name: "Start training job on Lightning studio"
+        run: "python ./ci/run_pipeline.py"
       - name: "Stop Lightning Studio"
         if: always()
         run: "python ./ci/shutdown_studio.py"
