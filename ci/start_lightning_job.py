@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     BASE_PATH = "/teamspace/studios/this_studio/algorithmic-quartet-mlops"
     # Update the code to the latest commit
-    studio.run(f"git -C {BASE_PATH} pull")
+    studio.run(f"git -C {BASE_PATH} reset --hard origin/main")
 
     # Update the dependencies
     studio.run(f"pip install -r {BASE_PATH}/training/requirements.txt")
