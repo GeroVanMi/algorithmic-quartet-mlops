@@ -1,8 +1,9 @@
 import wandb
 import yaml
 
-class WanDB:
-    def __init__(self, project_name: str, entity: str, mode='training', config=None):
+
+class WandB:
+    def __init__(self, project_name: str, entity: str, mode="training", config=None):
         """
         Initializes the W&B configuration based on the selected mode (training, development, production).
 
@@ -34,7 +35,12 @@ class WanDB:
         else:
             experiment_name = self.mode.upper()
 
-        self.run = wandb.init(project=self.project_name, entity=self.entity, config=self.config, name=experiment_name)
+        self.run = wandb.init(
+            project=self.project_name,
+            entity=self.entity,
+            config=self.config,
+            name=experiment_name,
+        )
         return self.run
 
     def log(self, metrics):
@@ -45,9 +51,11 @@ class WanDB:
         metrics (dict): Dictionary of metrics to log.
         """
         if self.run:
-            if self.mode == 'production':
+            if self.mode == "production":
                 # Log only key production metrics
-                filtered_metrics = {k: v for k, v in metrics.items() if k in ['throughput', 'latency']}
+                filtered_metrics = {
+                    k: v for k, v in metrics.items() if k in ["throughput", "latency"]
+                }
                 self.run.log(filtered_metrics)
             else:
                 self.run.log(metrics)
@@ -60,7 +68,7 @@ class WanDB:
         image: Image data.
         caption (str): Caption for the image.
         """
-        if self.run and self.mode != 'production':
+        if self.run and self.mode != "production":
             self.run.log({"image": [wandb.Image(image, caption=caption)]})
 
     def finish_run(self):
@@ -111,15 +119,16 @@ def start_sweep(project_name, entity, config_file):
     str: Sweep ID returned by W&B.
     """
     # load YAML-Datei
-    with open(config_file, 'r') as file:
+    with open(config_file, "r") as file:
         sweep_config = yaml.safe_load(file)
 
     # initialise W&B Manager
-    wandb_manager = WanDB(project_name, entity)
+    wandb_manager = WandB(project_name, entity)
 
     # create Sweep and return ID
     sweep_id = wandb_manager.create_sweep(sweep_config)
     return sweep_id
 
-#TODO: Discribe how to add the following code to the training script
-#TODO: Define the parameters for the sweep
+
+# TODO: Discribe how to add the following code to the training script
+# TODO: Define the parameters for the sweep

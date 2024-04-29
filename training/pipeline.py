@@ -4,6 +4,7 @@ import torch
 from configurations.Configuration import Configuration
 from configurations.create_config import create_config_from_arguments
 from configurations.DevConfig import DevConfig
+from configurations.WandBConfig import WandB
 from data_utilities.load_bucket import download_bucket_with_transfer_manager
 from datasets import load_dataset
 from diffusers.models.unets.unet_2d import UNet2DModel
@@ -36,6 +37,11 @@ def prepare_data(config: Configuration):
 
 def run_pipeline(config: Configuration):
     dataset = prepare_data(config)
+    wandb_config = WandB(
+        project_name="algorithmic-quartet-zhaw",
+        entity="algorithmic-quartet-zhaw-org",
+        mode="training",
+    )
 
     preprocess = transforms.Compose(
         [
@@ -97,7 +103,13 @@ def run_pipeline(config: Configuration):
     )
 
     train_loop(
-        config, model, noise_scheduler, optimizer, train_dataloader, lr_scheduler
+        config,
+        model,
+        noise_scheduler,
+        optimizer,
+        train_dataloader,
+        lr_scheduler,
+        wandb_config,
     )
 
 

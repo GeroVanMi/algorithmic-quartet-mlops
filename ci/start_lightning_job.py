@@ -12,12 +12,24 @@ if __name__ == "__main__":
     else:
         print("Studio is already running. Not starting it again.")
 
-    # use the jobs plugin
+    BASE_PATH = "/teamspace/studios/this_studio/algorithmic-quartet-mlops"
+    # Update the code to the latest commit
+    studio.run(f"git -C {BASE_PATH} pull")
+
+    # Update the dependencies
+    studio.run(f"pip install -r {BASE_PATH}/training/requirements.txt")
+
+    # Run the pipeline on the CPU once, to make sure that there are no errors
+    output, exit_code = studio.run(f"python {BASE_PATH}/training/pipeline.py")
+
+    # If there are errors, raise an exception and stop the execution!
+    if exit_code != 0:
+        print(output)
+        raise RuntimeError("Training pipeline did not run successfully!")
+
+    # Use the jobs plugin
     jobs_plugin = studio.installed_plugins["jobs"]
 
-    # Update to the newest version & Start the training script
-    cmd = f"""
-    git -C /teamspace/studios/this_studio/algorithmic-quartet-mlops pull && \
-    bash /teamspace/studios/this_studio/algorithmic-quartet-mlops/ci/lightning_run_pipeline.sh
-    """
-    jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
+    # Start the training pipeline on a GPU job
+    cmd = f"python {BASE_PATH}/training/pipeline.py --training"
+    jobs_plugin.run(cmd, name="Train model", machine=Machine.T4)  # type: ignore
