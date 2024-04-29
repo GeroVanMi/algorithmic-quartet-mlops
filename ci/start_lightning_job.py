@@ -19,6 +19,9 @@ if __name__ == "__main__":
     # Update the dependencies
     studio.run(f"pip install -r {BASE_PATH}/training/requirements.txt")
 
+    # Setup the cloud storage bucket
+    studio.run(f"bash {BASE_PATH}/training/setup_gc.sh")
+
     # Run the pipeline on the CPU once, to make sure that there are no errors
     output, exit_code = studio.run(f"python {BASE_PATH}/training/pipeline.py")
 
