@@ -17,6 +17,7 @@ if __name__ == "__main__":
 
     # Update to the newest version & Start the training script
     cmd = f"""
-    git pull && bash /teamspace/studios/this_studio/algorithmic-quartet-mlops/ci/lightning_run_pipeline.sh
+    git -C /teamspace/studios/this_studio/algorithmic-quartet-mlops pull && \
+    bash /teamspace/studios/this_studio/algorithmic-quartet-mlops/ci/lightning_run_pipeline.sh
     """
     jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
