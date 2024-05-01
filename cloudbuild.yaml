@@ -18,25 +18,3 @@ steps:
         "-e $$LIGHTNING_STUDIO",
         "europe-west9-docker.pkg.dev/algorithmic-quartet/lightning-executor:latest",
       ]
-    secretEnv:
-      [
-        "LIGHTNING_API_KEY",
-        "LIGHTNING_USER_ID",
-        "LIGHTNING_ORGANIZATION",
-        "LIGHTNING_TEAMSPACE",
-        "LIGHTNING_STUDIO",
-      ]
-
-logsBucket: gs://zhaw_algorithmic_quartet_cloud_build_logs
-availableSecrets:
-  secretManager:
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY/versions/latest
-      env: "LIGHTNING_API_KEY"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_USER_ID/versions/latest
-      env: "LIGHTNING_USER_ID"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_ORGANIZATION/versions/latest
-      env: "LIGHTNING_ORGANIZATION"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_TEAMSPACE/versions/latest
-      env: "LIGHTNING_TEAMSPACE"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_STUDIO/versions/latest
-      env: "LIGHTNING_STUDIO"
