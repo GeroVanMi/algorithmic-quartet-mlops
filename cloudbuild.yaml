@@ -27,6 +27,7 @@ steps:
         "LIGHTNING_STUDIO",
       ]
 
+logsBucket: gs://zhaw_algorithmic_quartet_cloud_build_logs
 availableSecrets:
   secretManager:
     - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY/versions/latest
