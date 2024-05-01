@@ -5,7 +5,7 @@ steps:
         "build",
         "-t",
         "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
-        "training/Dockerfile",
+        "training/",
       ]
   - name: "gcr.io/cloud-builders/docker"
     args:
