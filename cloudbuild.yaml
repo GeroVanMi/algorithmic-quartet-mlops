@@ -18,5 +18,5 @@ steps:
         "-e $$LIGHTNING_STUDIO",
         "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest",
       ]
-    images:
-      - "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest"
+    # images:
+    #   - "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest"
