@@ -29,13 +29,13 @@ steps:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY/versions/1
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY
       env: "LIGHTNING_API_KEY"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_USER_ID/versions/1
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_USER_ID
       env: "LIGHTNING_USER_ID"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_ORGANIZATION/versions/1
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_ORGANIZATION
       env: "LIGHTNING_ORGANIZATION"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_TEAMSPACE/versions/1
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_TEAMSPACE
       env: "LIGHTNING_TEAMSPACE"
-    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_STUDIO/versions/1
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_STUDIO
       env: "LIGHTNING_STUDIO"
