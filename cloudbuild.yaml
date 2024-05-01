@@ -1,12 +1,12 @@
 steps:
-  - name: "gcr.io/cloud-builders/docker"
-    args:
-      [
-        "build",
-        "-t",
-        "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
-        "training/",
-      ]
+  # - name: "gcr.io/cloud-builders/docker"
+  #   args:
+  #     [
+  #       "build",
+  #       "-t",
+  #       "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
+  #       "training/",
+  #     ]
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
@@ -16,5 +16,7 @@ steps:
         "-e $$LIGHTNING_ORGANIZATION",
         "-e $$LIGHTNING_TEAMSPACE",
         "-e $$LIGHTNING_STUDIO",
-        "europe-west9-docker.pkg.dev/algorithmic-quartet/lightning-executor:latest",
+        "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest",
       ]
+    images:
+      - "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest"
