@@ -1,0 +1,26 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
+        "training/Dockerfile",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["run", '-e LIGHTNING_API_KEY', '-e LIGHTNING_USER_ID', '-e LIGHTNING_ORGANIZATION', '-e LIGHTNING_TEAMSPACE', '-e LIGHTNING_STUDIO', 'europe-west9-docker.pkg.dev/algorithmic-quartet/lightning-executor:latest']
+   secretEnv: ['LIGHTNING_API_KEY', 'LIGHTNING_USER_ID', 'LIGHTNING_ORGANIZATION', 'LIGHTNING_TEAMSPACE', 'LIGHTNING_STUDIO']
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY/versions/1
+      env: "LIGHTNING_API_KEY"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_USER_ID/versions/1
+      env: "LIGHTNING_USER_ID"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_ORGANIZATION/versions/1
+      env: "LIGHTNING_ORGANIZATION"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_TEAMSPACE/versions/1
+      env: "LIGHTNING_TEAMSPACE"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_STUDIO/versions/1
+      env: "LIGHTNING_STUDIO"

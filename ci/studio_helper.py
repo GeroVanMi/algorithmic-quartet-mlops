@@ -8,10 +8,15 @@ def create_studio() -> Studio:
     Creates a lightning AI studio.
     This does not start the studio automatically!
     """
-    # TODO: Implement error handling if the variables are not set
-    #       With a nice message telling the user what is wrong.
+    studio = os.environ.get("LIGHTNING_STUDIO")
+    org = os.environ.get("LIGHTNING_ORGANIZATION")
+    teamspace = os.environ.get("LIGHTNING_TEAMSPACE")
+
+    if studio is None or org is None or teamspace is None:
+        raise OSError("Environment variables for lightning are not set!")
+
     return Studio(
-        os.environ["LIGHTNING_STUDIO"],
-        org=os.environ["LIGHTNING_ORGANIZATION"],
-        teamspace=os.environ["LIGHTNING_TEAMSPACE"],
+        studio,
+        org=org,
+        teamspace=teamspace,
     )
