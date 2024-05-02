@@ -4,7 +4,7 @@ steps:
     args:
       [
         "-c",
-        "docker pull europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-trainer:latest || exit 0",
+        "docker pull europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer:latest || exit 0",
       ]
   - name: "gcr.io/cloud-builders/docker"
     args:
