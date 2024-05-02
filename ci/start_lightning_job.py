@@ -24,7 +24,7 @@ if __name__ == "__main__":
         "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev"
     )
     studio.run(
-        "docker run --gpus all europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
+        "docker run europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
     )
     # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
 
