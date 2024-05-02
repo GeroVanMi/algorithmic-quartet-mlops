@@ -7,6 +7,7 @@ if __name__ == "__main__":
     print("Creating studio instance.")
     studio = create_studio()
 
+    print(studio.status)
     if studio.status != "Status.Running":
         print("Starting studio.")
         studio.start()
@@ -22,14 +23,19 @@ if __name__ == "__main__":
     # cmd = f"""cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev && \
     # docker run --gpus all europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
     # """
-    studio.run(f"export WANDB_KEY={os.environ.get('WANDB_KEY')}")
-    studio.run(f"export GC_BUCKET_KEY={os.environ.get('GC_BUCKET_KEY')}")
+    studio.run(f'export WANDB_KEY={os.environ.get("WANDB_KEY")}')
+    studio.run(f'export GC_BUCKET_KEY=\'{os.environ.get("GC_BUCKET_KEY")}\'')
+
+    print("Setting up Google Cloud credentials.")
     studio.run(
         "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev"
     )
+
+    print("Running training docker container...")
     studio.run(
-        "docker run -i -e WANDB_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
+        "docker run -it -e WANDB_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
     )
     # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
 
+    print("Saving state and quitting...")
     studio.stop()
