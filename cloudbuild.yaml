@@ -1,5 +1,39 @@
 steps:
+  # Build lightning-executor
   - name: "gcr.io/cloud-builders/docker"
+    id: PullLightningExecutorCache
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest || exit 0",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: BuildLightningExecutor
+    waitFor:
+      - PullLightningExecutorCache
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor",
+        "--cache-from",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest",
+        "ci/",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: PushLightningExecutor
+    waitFor:
+      - BuildLightningExecutor
+    args:
+      [
+        "push",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor",
+      ]
+  # Build training pipeline
+  - name: "gcr.io/cloud-builders/docker"
+    id: PullTrainingPipelineCache
+    waitFor: ["-"]
     entrypoint: "bash"
     args:
       [
@@ -7,6 +41,9 @@ steps:
         "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer:latest || exit 0",
       ]
   - name: "gcr.io/cloud-builders/docker"
+    id: BuildTrainingPipeline
+    waitFor:
+      - PullTrainingPipelineCache
     args:
       [
         "build",
@@ -17,12 +54,19 @@ steps:
         "training/",
       ]
   - name: "gcr.io/cloud-builders/docker"
+    id: PushTrainingPipeline
+    waitFor:
+      - BuildTrainingPipeline
     args:
       [
         "push",
         "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer",
       ]
   - name: "gcr.io/cloud-builders/docker"
+    id: RunTrainingPipeline
+    waitFor:
+      - PushLightningExecutor
+      - PushTrainingPipeline
     entrypoint: "bash"
     args:
       [
