@@ -19,3 +19,11 @@ availableSecrets:
   secretManager:
     - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY/versions/latest
       env: "LIGHTNING_API_KEY"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_USER_ID/versions/latest
+      env: "LIGHTNING_USER_ID"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_ORGANIZATION/versions/latest
+      env: "LIGHTNING_ORGANIZATION"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_TEAMSPACE/versions/latest
+      env: "LIGHTNING_TEAMSPACE"
+    - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_STUDIO/versions/latest
+      env: "LIGHTNING_STUDIO"
