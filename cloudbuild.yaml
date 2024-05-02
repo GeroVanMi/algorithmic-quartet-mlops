@@ -14,7 +14,14 @@ steps:
         "-c",
         "docker run -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest",
       ]
-    secretEnv: ["LIGHTNING_API_KEY"]
+    secretEnv:
+      [
+        "LIGHTNING_API_KEY",
+        "LIGHTNING_USER_ID",
+        "LIGHTNING_ORGANIZATION",
+        "LIGHTNING_TEAMSPACE",
+        "LIGHTNING_STUDIO",
+      ]
 availableSecrets:
   secretManager:
     - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY/versions/latest
