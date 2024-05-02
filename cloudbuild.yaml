@@ -1,11 +1,17 @@
 steps:
   - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      ["-c", "docker pull gcr.io/$PROJECT_ID/pokemon-trainer:latest || exit 0"]
+  - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
         "--output=type=registry",
         "-t",
-        "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
+        "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer",
+        "--cache-from",
+        "gcr.io/$PROJECT_ID/pokemon-trainer:latest",
         "training/",
       ]
   - name: "gcr.io/cloud-builders/docker"
