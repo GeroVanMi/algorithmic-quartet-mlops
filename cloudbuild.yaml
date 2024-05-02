@@ -1,12 +1,13 @@
 steps:
-  # - name: "gcr.io/cloud-builders/docker"
-  #   args:
-  #     [
-  #       "build",
-  #       "-t",
-  #       "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
-  #       "training/",
-  #     ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "--push",
+        "-t",
+        "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
+        "training/",
+      ]
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
     args:
