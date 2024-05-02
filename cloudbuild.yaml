@@ -3,7 +3,7 @@ steps:
     args:
       [
         "build",
-        "--push",
+        "--output=type=registry",
         "-t",
         "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
         "training/",
