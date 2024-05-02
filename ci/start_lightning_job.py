@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     print("Running training docker container...")
     studio.run(
-        "docker run -it -e WANDB_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
+        "docker run -e WANDB_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
     )
     # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
 
