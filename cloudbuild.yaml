@@ -7,9 +7,7 @@ steps:
         "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
         "training/",
       ]
-    images:
-      - "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
-  - name: "gcr.io/cloud-builders/docker"
+      - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
     args:
       [
@@ -24,6 +22,9 @@ steps:
         "LIGHTNING_TEAMSPACE",
         "LIGHTNING_STUDIO",
       ]
+images:
+  - "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer"
+  - "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor"
 availableSecrets:
   secretManager:
     - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_API_KEY/versions/latest
