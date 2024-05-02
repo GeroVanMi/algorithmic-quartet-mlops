@@ -12,7 +12,7 @@ steps:
     args:
       [
         "-c",
-        "docker run -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest",
+        "docker run -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO -e WANDB_API_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/lightning-executor:latest",
       ]
     secretEnv:
       [
@@ -21,6 +21,8 @@ steps:
         "LIGHTNING_ORGANIZATION",
         "LIGHTNING_TEAMSPACE",
         "LIGHTNING_STUDIO",
+        "WANDB_API_KEY",
+        "GC_BUCKET_KEY",
       ]
 images:
   - "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer"
@@ -37,3 +39,7 @@ availableSecrets:
       env: "LIGHTNING_TEAMSPACE"
     - versionName: projects/algorithmic-quartet/secrets/LIGHTNING_STUDIO/versions/latest
       env: "LIGHTNING_STUDIO"
+    - versionName: projects/algorithmic-quartet/secrets/WANDB_API_KEY/versions/latest
+      env: "WANDB_API_KEY"
+    - versionName: projects/algorithmic-quartet/secrets/GC_BUCKET_KEY/versions/latest
+      env: "GC_BUCKET_KEY"

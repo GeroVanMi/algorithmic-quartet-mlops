@@ -1,3 +1,5 @@
+import os
+
 from lightning_sdk import Machine
 from studio_helper import create_studio
 
@@ -20,11 +22,13 @@ if __name__ == "__main__":
     # cmd = f"""cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev && \
     # docker run --gpus all europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
     # """
+    studio.run(f"export WANDB_KEY={os.environ.get('WANDB_KEY')}")
+    studio.run(f"export GC_BUCKET_KEY={os.environ.get('GC_BUCKET_KEY')}")
     studio.run(
         "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev"
     )
     studio.run(
-        "docker run europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
+        "docker run -i -e WANDB_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
     )
     # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
 

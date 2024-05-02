@@ -38,10 +38,11 @@ def prepare_data(config: Configuration):
 def run_pipeline(config: Configuration):
     dataset = prepare_data(config)
     wandb_config = WandB(
-        project_name="algorithmic-quartet-zhaw",
-        entity="algorithmic-quartet-zhaw-org",
+        project_name="Training",
+        entity="algorithmic-quartet-zhaw",
         mode="training",
     )
+    wandb_config.create_run("Train Model")
 
     preprocess = transforms.Compose(
         [
