@@ -23,6 +23,7 @@ if __name__ == "__main__":
     # cmd = f"""cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev && \
     # docker run --gpus all europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
     # """
+    print(os.environ.get("WANDB_API_KEY"))
     studio.run(f'export WANDB_KEY={os.environ.get("WANDB_API_KEY")}')
     studio.run(f'export GC_BUCKET_KEY=\'{os.environ.get("GC_BUCKET_KEY")}\'')
 
@@ -31,7 +32,7 @@ if __name__ == "__main__":
         "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev"
     )
     print("Logging into W&B...")
-    studio.run("wandb login $WANDB_KEY")
+    studio.run(f"wandb login {os.environ.get("WANDB_API_KEY")}")
 
     print("Running training docker container...")
     studio.run(
