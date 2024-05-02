@@ -10,12 +10,17 @@ steps:
     args:
       [
         "build",
-        "--output=type=registry",
         "-t",
         "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer",
         "--cache-from",
         "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer:latest",
         "training/",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer",
       ]
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
