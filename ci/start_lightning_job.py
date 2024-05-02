@@ -20,8 +20,8 @@ if __name__ == "__main__":
     jobs_plugin = studio.installed_plugins["jobs"]
 
     # Start the training pipeline on a GPU job
-    # cmd = f"""cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev && \
-    # docker run --gpus all europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
+    # cmd = f"""cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west1-docker.pkg.dev && \
+    # docker run --gpus all europe-west1-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
     # """
     studio.run(f'export WANDB_KEY={os.environ.get("WANDB_API_KEY")}')
     studio.run(f'export GC_BUCKET_KEY=\'{os.environ.get("GC_BUCKET_KEY")}\'')
@@ -29,12 +29,12 @@ if __name__ == "__main__":
     # Setup access to the artifact registry
     print("Setting up Google Cloud credentials.")
     studio.run(
-        "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west9-docker.pkg.dev"
+        "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west1-docker.pkg.dev"
     )
 
     print("Running training docker container...")
     studio.run(
-        "docker run -e WANDB_API_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest"
+        "docker run -e WANDB_API_KEY -e GC_BUCKET_KEY europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
     # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
 
