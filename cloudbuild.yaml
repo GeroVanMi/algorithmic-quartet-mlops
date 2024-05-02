@@ -7,7 +7,7 @@ steps:
         "europe-west9-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest",
         "training/",
       ]
-      - name: "gcr.io/cloud-builders/docker"
+  - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
     args:
       [
