@@ -4,30 +4,30 @@ steps:
     args:
       [
         "-c",
-        "docker pull europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer:latest || exit 0",
+        "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer:latest || exit 0",
       ]
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "build",
         "-t",
-        "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer",
         "--cache-from",
-        "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer:latest",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer:latest",
         "training/",
       ]
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
-        "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer",
       ]
   - name: "gcr.io/cloud-builders/docker"
     entrypoint: "bash"
     args:
       [
         "-c",
-        "docker run -i -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO -e WANDB_API_KEY -e GC_BUCKET_KEY europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/lightning-executor:latest",
+        "docker run -i -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO -e WANDB_API_KEY -e GC_BUCKET_KEY europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest",
       ]
     secretEnv:
       [
@@ -40,8 +40,8 @@ steps:
         "GC_BUCKET_KEY",
       ]
 images:
-  - "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer"
-  - "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/lightning-executor"
+  - "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer"
+  - "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor"
 availableSecrets:
   secretManager:
     - versionName: projects/$PROJECT_ID/secrets/LIGHTNING_API_KEY/versions/latest
