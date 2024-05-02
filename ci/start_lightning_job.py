@@ -25,6 +25,7 @@ if __name__ == "__main__":
     # """
     studio.run(f'export WANDB_API_KEY={os.environ.get("WANDB_API_KEY")}')
     studio.run(f'export GC_BUCKET_KEY=\'{os.environ.get("GC_BUCKET_KEY")}\'')
+    studio.run(f"echo $WANDB_API_KEY")
 
     # Setup access to the artifact registry
     print("Setting up Google Cloud credentials.")

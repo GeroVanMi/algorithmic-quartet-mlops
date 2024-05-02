@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e 
 # W&B Login
+echo $WANDB_API_KEY
 wandb login $WANDB_API_KEY
 
 # Google Cloud Service Account Login
