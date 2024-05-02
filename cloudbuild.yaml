@@ -14,7 +14,7 @@ steps:
         "-t",
         "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer",
         "--cache-from",
-        "gcr.io/$PROJECT_ID/pokemon-trainer:latest",
+        "europe-west9-docker.pkg.dev/$PROJECT_ID/training-pipelines/pokemon-trainer:latest",
         "training/",
       ]
   - name: "gcr.io/cloud-builders/docker"
