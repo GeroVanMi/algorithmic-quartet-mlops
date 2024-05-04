@@ -23,14 +23,10 @@ if __name__ == "__main__":
     # cmd = f"""cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west1-docker.pkg.dev && \
     # docker run --gpus all europe-west1-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
     # """
-    studio.run(f'export WANDB_API_KEY={os.environ.get("WANDB_API_KEY")}')
-    studio.run(f'export GC_BUCKET_KEY=\'{os.environ.get("GC_BUCKET_KEY")}\'')
+    # studio.run(f'export WANDB_API_KEY={os.environ.get("WANDB_API_KEY")}')
+    # studio.run(f'export GC_BUCKET_KEY=\'{os.environ.get("GC_BUCKET_KEY")}\'')
 
-    print("Is the W&B variable set?")
-    output, exit_code = studio.run(f"echo $WANDB_API_KEY")
-    print(output)
-
-    # Setup access to the artifact registry
+    print(os.environ.get("WANDB_API_KEY"))
     print("Logging into Google Cloud Artifact registry with docker.")
     studio.run(
         "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://europe-west1-docker.pkg.dev"
@@ -40,8 +36,9 @@ if __name__ == "__main__":
     studio.run(
         "docker pull europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
+    # TODO: It would be better to silently create an ENV file so that the secrets never get printed to the terminal.
     output, exit_code = studio.run(
-        "docker run -e WANDB_API_KEY -e GC_BUCKET_KEY europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
+        f"docker run -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
     print(output)
     # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
