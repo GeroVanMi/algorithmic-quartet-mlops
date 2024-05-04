@@ -32,17 +32,19 @@ if __name__ == "__main__":
     )
 
     print("Running training docker container...")
-    studio.run(
-        f"echo '{os.environ.get('WANDB_API_KEY')}' > ~/.env && echo '{os.environ.get('GC_BUCKET_KEY')}' >> ~/.env"
-    )
+    # TODO: The environment variables should be stored in an ENV file and passed to the container like that to prevent them from being logged to the terminal.
+
+    # studio.run(
+    #     f"echo '{os.environ.get('WANDB_API_KEY')}' > ~/.env && echo '{os.environ.get('GC_BUCKET_KEY')}' >> ~/.env"
+    # )
     studio.run(
         "docker pull europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
     studio.run(
-        f"docker run --env-file ~/.env europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
+        f"docker run -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
     # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
-    studio.run("rm ~/.env")
+    # studio.run("rm ~/.env")
 
     print("Saving state and quitting...")
     studio.stop()
