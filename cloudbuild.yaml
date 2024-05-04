@@ -12,6 +12,7 @@ steps:
     id: BuildLightningExecutor
     waitFor:
       - PullLightningExecutorCache
+    dir: "ci"
     args:
       [
         "build",
@@ -19,7 +20,7 @@ steps:
         "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor",
         "--cache-from",
         "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest",
-        "ci/",
+        ".",
       ]
   - name: "gcr.io/cloud-builders/docker"
     id: PushLightningExecutor
@@ -42,6 +43,7 @@ steps:
       ]
   - name: "gcr.io/cloud-builders/docker"
     id: BuildTrainingPipeline
+    dir: "training/"
     waitFor:
       - PullTrainingPipelineCache
     args:
@@ -51,7 +53,7 @@ steps:
         "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer",
         "--cache-from",
         "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer:latest",
-        "training/",
+        ".",
       ]
   - name: "gcr.io/cloud-builders/docker"
     id: PushTrainingPipeline
