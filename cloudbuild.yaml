@@ -64,6 +64,7 @@ steps:
         "push",
         "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer",
       ]
+  # Run Lightning Executor
   - name: "gcr.io/cloud-builders/docker"
     id: RunTrainingPipeline
     waitFor:

@@ -1,5 +1,3 @@
-import argparse
-
 import torch
 from configurations.Configuration import Configuration
 from configurations.create_config import create_config_from_arguments
@@ -25,9 +23,7 @@ def prepare_data(config: Configuration):
                 config.training_bucket_name, max_results=config.num_images
             )
 
-        return load_dataset(
-            str(config.local_dataset_path.resolve()), split="train[0:6]"
-        )
+        return load_dataset(str(config.local_dataset_path.resolve()), split="train")
 
     if not config.local_dataset_path.exists():
         download_bucket_with_transfer_manager(config.training_bucket_name)
@@ -111,6 +107,11 @@ def run_pipeline(config: Configuration):
         train_dataloader,
         lr_scheduler,
         wandb_config,
+    )
+
+    wandb_config.link_model(
+        config.output_dir,
+        config.model_name,
     )
 
 

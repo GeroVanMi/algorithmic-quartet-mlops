@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import wandb
 import yaml
 
@@ -31,7 +33,7 @@ class WandB:
         """
         # Append mode to experiment name if provided
         if experiment_name:
-            experiment_name = f"{self.mode.upper()}_{experiment_name}"
+            experiment_name = experiment_name
         else:
             experiment_name = self.mode.upper()
 
@@ -70,6 +72,18 @@ class WandB:
         """
         if self.run and self.mode != "production":
             self.run.log({"image": [wandb.Image(image, caption=caption)]})
+
+    def link_model(self, model_path: str, model_name: str):
+        """
+        Uploads a model to the W&B model registry. Only works if the given path actually
+        exists and the W&B run was initalized.
+
+        Args:
+        model_path: Path to the file that stores the trained model.
+        model_name: How the model should be called in the registry.
+        """
+        if self.run and Path(model_path).exists():
+            self.run.link_model(path=model_path, registered_model_name=model_name)
 
     def finish_run(self):
         """
