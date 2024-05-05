@@ -18,8 +18,6 @@ class Configuration:
     model_name = "pokemon-generator"
     output_dir = f"./models/{model_name}"
 
-    push_to_hub = False  # whether to upload the saved model to the HF Hub
-    hub_private_repo = False
     overwrite_output_dir = True  # overwrite the old model when re-running the notebook
     seed = 0
     number_of_noise_steps = 5  # Set to 1000 for training
