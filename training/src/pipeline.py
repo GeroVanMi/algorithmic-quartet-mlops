@@ -1,34 +1,17 @@
 import torch
-from configurations.Configuration import Configuration
-from configurations.create_config import create_config_from_arguments
-from configurations.DevConfig import DevConfig
-from configurations.WandBConfig import WandB
-from data_utilities.load_bucket import download_bucket_with_transfer_manager
-from datasets import load_dataset
-from diffusers.models.unets.unet_2d import UNet2DModel
+from configurations import (
+    Configuration,
+    TrainConfig,
+    WandB,
+    create_config_from_arguments,
+)
+from data_utilities.cloud_bucket import prepare_data
 from diffusers.optimization import get_cosine_schedule_with_warmup
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
+from model.create_model import create_model
 from torch.utils.data.dataloader import DataLoader
 from torchvision import transforms
 from train import train_loop
-
-
-def prepare_data(config: Configuration):
-    if isinstance(config, DevConfig):
-        print("Testing Training pipeline. This will not train the model!")
-        print("In order to train the model, pass the -t or --training flag!")
-
-        if not config.local_dataset_path.exists():
-            download_bucket_with_transfer_manager(
-                config.training_bucket_name, max_results=config.num_images
-            )
-
-        return load_dataset(str(config.local_dataset_path.resolve()), split="train")
-
-    if not config.local_dataset_path.exists():
-        download_bucket_with_transfer_manager(config.training_bucket_name)
-
-        return load_dataset(str(config.local_dataset_path.resolve()))
 
 
 def run_pipeline(config: Configuration):
@@ -60,37 +43,7 @@ def run_pipeline(config: Configuration):
         batch_size=config.train_batch_size,
         shuffle=True,
     )
-    model = UNet2DModel(
-        sample_size=config.image_size,  # the target image resolution
-        in_channels=3,  # the number of input channels, 3 for RGB images
-        out_channels=3,  # the number of output channels
-        layers_per_block=2,  # how many ResNet layers to use per UNet block
-        block_out_channels=(
-            128,
-            128,
-            256,
-            256,
-            512,
-            512,
-        ),  # the number of output channels for each UNet block
-        down_block_types=(
-            "DownBlock2D",  # a regular ResNet downsampling block
-            "DownBlock2D",
-            "DownBlock2D",
-            "DownBlock2D",
-            "AttnDownBlock2D",  # a ResNet downsampling block with spatial self-attention
-            "DownBlock2D",
-        ),
-        up_block_types=(
-            "UpBlock2D",  # a regular ResNet upsampling block
-            "AttnUpBlock2D",  # a ResNet upsampling block with spatial self-attention
-            "UpBlock2D",
-            "UpBlock2D",
-            "UpBlock2D",
-            "UpBlock2D",
-        ),
-    )
-
+    model = create_model(config)
     noise_scheduler = DDPMScheduler(num_train_timesteps=config.number_of_noise_steps)
     optimizer = torch.optim.AdamW(model.parameters(), lr=config.learning_rate)
     lr_scheduler = get_cosine_schedule_with_warmup(
@@ -109,10 +62,11 @@ def run_pipeline(config: Configuration):
         wandb_config,
     )
 
-    wandb_config.link_model(
-        config.output_dir,
-        config.model_name,
-    )
+    if isinstance(config, TrainConfig):
+        wandb_config.link_model(
+            config.output_dir,
+            config.model_name,
+        )
 
 
 if __name__ == "__main__":

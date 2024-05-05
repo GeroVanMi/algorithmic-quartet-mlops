@@ -28,3 +28,4 @@ class Configuration:
     train_batch_size = 2
     eval_batch_size = 16
     num_epochs = 2
+    num_images = 7351
