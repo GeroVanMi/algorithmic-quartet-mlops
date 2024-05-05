@@ -2,6 +2,8 @@ import streamlit as st
 import gcsfs
 import time
 import random
+from streamlit_star_rating import st_star_rating
+
 
 st.set_page_config(
     page_title="Pokemon Generator",
@@ -43,10 +45,20 @@ def display_images():
 
     st.image(images, width=300)  # Display images with ratings
 
+# Possible way to create Feedback
+def function_to_run_on_click(value):
+    st.write(f"You gave the Pokemons **{value}** stars!")
+    # Feedback for current model?
+
 
 # Button to generate / model call! TODO How to call our model?
 if st.button('Generate'):
     with st.spinner(text='In progress'):
-        time.sleep(2) # TODO make it depend of the model inference?
+        time.sleep(2) # TODO make it depend of the model inference? call server .predict()
     st.write_stream(text_stream(text))
     display_images()
+    stars = st_star_rating("Please rate your generated Pokemons", maxValue=5, defaultValue=0, key="rating",
+                           on_click=function_to_run_on_click)
+
+
+
