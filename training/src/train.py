@@ -5,6 +5,7 @@ import torch
 import torch.nn.functional as F
 from accelerate import Accelerator
 from configurations.Configuration import Configuration
+from configurations.WandBConfig import WandB
 from diffusers.pipelines.ddpm.pipeline_ddpm import DDPMPipeline
 from evaluate import evaluate
 from huggingface_hub import create_repo, upload_folder
@@ -18,6 +19,7 @@ def train_loop(
     optimizer,
     train_dataloader,
     lr_scheduler,
+    wandb_config: WandB,
 ):
     # Initialize accelerator and tensorboard logging
     accelerator = Accelerator(
@@ -90,6 +92,7 @@ def train_loop(
             }
             progress_bar.set_postfix(**logs)
             accelerator.log(logs, step=global_step)
+            wandb_config.log(logs)
             global_step += 1
 
         # After each epoch you optionally sample some demo images with evaluate() and save the model

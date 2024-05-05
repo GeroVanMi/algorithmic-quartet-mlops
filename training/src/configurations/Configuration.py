@@ -15,7 +15,8 @@ class Configuration:
     local_dataset_path = Path("./data/")
     training_bucket_name = "zhaw_algorithmic_quartet_training_images"
 
-    output_dir = "./models/ddpm-pokemon-128"
+    model_name = "pokemon-generator"
+    output_dir = f"./models/{model_name}"
 
     push_to_hub = False  # whether to upload the saved model to the HF Hub
     hub_private_repo = False
@@ -27,3 +28,4 @@ class Configuration:
     train_batch_size = 2
     eval_batch_size = 16
     num_epochs = 2
+    num_images = 7351

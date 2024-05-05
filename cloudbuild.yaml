@@ -1,0 +1,107 @@
+steps:
+  # Build lightning-executor
+  - name: "gcr.io/cloud-builders/docker"
+    id: PullLightningExecutorCache
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest || exit 0",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: BuildLightningExecutor
+    waitFor:
+      - PullLightningExecutorCache
+    dir: "ci"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor",
+        "--cache-from",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: PushLightningExecutor
+    waitFor:
+      - BuildLightningExecutor
+    args:
+      [
+        "push",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor",
+      ]
+  # Build training pipeline
+  - name: "gcr.io/cloud-builders/docker"
+    id: PullTrainingPipelineCache
+    waitFor: ["-"]
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer:latest || exit 0",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: BuildTrainingPipeline
+    dir: "training/"
+    waitFor:
+      - PullTrainingPipelineCache
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer",
+        "--cache-from",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer:latest",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: PushTrainingPipeline
+    waitFor:
+      - BuildTrainingPipeline
+    args:
+      [
+        "push",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer",
+      ]
+  # Run Lightning Executor
+  - name: "gcr.io/cloud-builders/docker"
+    id: RunTrainingPipeline
+    waitFor:
+      - PushLightningExecutor
+      - PushTrainingPipeline
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "docker run -i -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO -e WANDB_API_KEY -e GC_BUCKET_KEY europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest",
+      ]
+    secretEnv:
+      [
+        "LIGHTNING_API_KEY",
+        "LIGHTNING_USER_ID",
+        "LIGHTNING_ORGANIZATION",
+        "LIGHTNING_TEAMSPACE",
+        "LIGHTNING_STUDIO",
+        "WANDB_API_KEY",
+        "GC_BUCKET_KEY",
+      ]
+images:
+  - "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/pokemon-trainer"
+  - "europe-west1-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor"
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/LIGHTNING_API_KEY/versions/latest
+      env: "LIGHTNING_API_KEY"
+    - versionName: projects/$PROJECT_ID/secrets/LIGHTNING_USER_ID/versions/latest
+      env: "LIGHTNING_USER_ID"
+    - versionName: projects/$PROJECT_ID/secrets/LIGHTNING_ORGANIZATION/versions/latest
+      env: "LIGHTNING_ORGANIZATION"
+    - versionName: projects/$PROJECT_ID/secrets/LIGHTNING_TEAMSPACE/versions/latest
+      env: "LIGHTNING_TEAMSPACE"
+    - versionName: projects/$PROJECT_ID/secrets/LIGHTNING_STUDIO/versions/latest
+      env: "LIGHTNING_STUDIO"
+    - versionName: projects/$PROJECT_ID/secrets/WANDB_API_KEY/versions/latest
+      env: "WANDB_API_KEY"
+    - versionName: projects/$PROJECT_ID/secrets/GC_BUCKET_KEY/versions/latest
+      env: "GC_BUCKET_KEY"

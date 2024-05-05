@@ -1,12 +1,15 @@
 # Data and Model Checkpoints
 data/
 models/
-frontend/.streamlit/secrets.toml
+
+# W&B log files  
+wandb/
 
 # Cloud authentication keys
 keys/
 gha-creds-*.json
 .env
+frontend/.streamlit/secrets.toml
 
 # IntelliJ IDEs
 .idea/
