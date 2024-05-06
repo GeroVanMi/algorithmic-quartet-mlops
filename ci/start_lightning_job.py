@@ -10,7 +10,7 @@ if __name__ == "__main__":
     print(studio.status)
     if studio.status != "Status.Running":
         print("Starting studio.")
-        studio.start()
+        studio.start(Machine.T4)
     else:
         print("Studio is already running. Not starting it again.")
 
@@ -41,12 +41,9 @@ if __name__ == "__main__":
         "docker pull europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
 
-    studio.switch_machine(Machine.T4)
-
     studio.run(
         f"docker run -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
-    # jobs_plugin.run(cmd, name="Train model", machine=Machine.CPU)  # type: ignore
     # studio.run("rm ~/.env")
 
     print("Saving state and quitting...")
