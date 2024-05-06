@@ -21,7 +21,9 @@ def prepare_data(config: Configuration):
             split=f"train[0:{config.num_images}]",
         )
 
-    return load_dataset(str(config.local_dataset_path.resolve()), split="train")
+    return load_dataset(
+        str(config.local_dataset_path.resolve()), split=f"train[0:{config.num_images}]"
+    )
 
 
 def download_bucket_with_transfer_manager(

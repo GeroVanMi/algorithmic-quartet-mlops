@@ -12,6 +12,7 @@ from PIL.Image import Image
 
 
 # TODO: This code should be imported from `training/src/model/create_model`
+# But python is a terrible language that doesn't allow importing from neighboring folders so I guess we just copy+paste?
 def create_model(config: Configuration):
     return UNet2DModel(
         sample_size=config.image_size,  # the target image resolution

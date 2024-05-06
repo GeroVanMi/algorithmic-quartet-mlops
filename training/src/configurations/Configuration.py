@@ -18,11 +18,10 @@ class Configuration:
     model_name = "pokemon-generator"
     output_dir = f"./models/{model_name}"
 
-    overwrite_output_dir = True  # overwrite the old model when re-running the notebook
     seed = 0
-    number_of_noise_steps = 5  # Set to 1000 for training
 
     # These values are overwritten by the Dev / Train Configs
+    number_of_noise_steps = 100  # Set to 1000 for training
     train_batch_size = 2
     eval_batch_size = 16
     num_epochs = 2
