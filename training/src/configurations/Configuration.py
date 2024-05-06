@@ -21,7 +21,7 @@ class Configuration:
     seed = 0
 
     # These values are overwritten by the Dev / Train Configs
-    number_of_noise_steps = 100  # Set to 1000 for training
+    number_of_noise_steps = 1000  # Set to 1000 for training
     train_batch_size = 2
     eval_batch_size = 16
     num_epochs = 2

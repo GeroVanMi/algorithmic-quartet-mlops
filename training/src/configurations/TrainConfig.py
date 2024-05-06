@@ -7,5 +7,5 @@ from .Configuration import Configuration
 class TrainConfig(Configuration):
     train_batch_size = 24
     eval_batch_size = 8
-    num_epochs = 10
-    num_images = 1000
+    num_epochs = 30
+    num_images = 2000

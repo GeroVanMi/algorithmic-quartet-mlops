@@ -14,7 +14,7 @@ def evaluate(config: Configuration, epoch, pipeline):
     ).images
 
     test_dir = os.path.join(config.output_dir, "samples")
-    test_dir = os.path.join(config.output_dir, f"epoch_{epoch}")
+    test_dir = os.path.join(test_dir, f"epoch_{epoch}")
     os.makedirs(test_dir, exist_ok=True)
 
     for index, image in enumerate(images):
