@@ -42,7 +42,7 @@ if __name__ == "__main__":
     )
 
     studio.run(
-        f"docker run -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
+        f"docker run --gpus all -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' europe-west1-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )
     # studio.run("rm ~/.env")
 
