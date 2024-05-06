@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 import torch
 import torch.nn.functional as F
@@ -8,7 +7,6 @@ from configurations.Configuration import Configuration
 from configurations.WandBConfig import WandB
 from diffusers.pipelines.ddpm.pipeline_ddpm import DDPMPipeline
 from evaluate import evaluate
-from huggingface_hub import create_repo, upload_folder
 from tqdm.auto import tqdm
 
 
@@ -31,11 +29,6 @@ def train_loop(
     if accelerator.is_main_process:
         if config.output_dir is not None:
             os.makedirs(config.output_dir, exist_ok=True)
-        if config.push_to_hub:
-            repo_id = create_repo(
-                repo_id=config.hub_model_id or Path(config.output_dir).name,
-                exist_ok=True,
-            ).repo_id
         accelerator.init_trackers("train_example")
 
     # Prepare everything
@@ -92,7 +85,7 @@ def train_loop(
             }
             progress_bar.set_postfix(**logs)
             accelerator.log(logs, step=global_step)
-            wandb_config.log(logs)
+            wandb_config.log({"loss": logs["loss"]})
             global_step += 1
 
         # After each epoch you optionally sample some demo images with evaluate() and save the model
@@ -102,19 +95,11 @@ def train_loop(
             )
 
             if (
-                epoch + 1
-            ) % config.save_image_epochs == 0 or epoch == config.num_epochs - 1:
+                (epoch + 1) % config.save_image_epochs == 0
+            ) or epoch == config.num_epochs - 1:
                 evaluate(config, epoch, pipeline)
 
             if (
-                epoch + 1
-            ) % config.save_model_epochs == 0 or epoch == config.num_epochs - 1:
-                if config.push_to_hub:
-                    upload_folder(
-                        repo_id=repo_id,
-                        folder_path=config.output_dir,
-                        commit_message=f"Epoch {epoch}",
-                        ignore_patterns=["step_*", "epoch_*"],
-                    )
-                else:
-                    pipeline.save_pretrained(config.output_dir)
+                (epoch + 1) % config.save_model_epochs == 0
+            ) or epoch == config.num_epochs - 1:
+                pipeline.save_pretrained(config.output_dir)

@@ -6,10 +6,6 @@ from pathlib import Path
 class Configuration:
     image_size = 128  # the generated image resolution
     gradient_accumulation_steps = 1
-    learning_rate = 1e-4
-    lr_warmup_steps = 500
-    save_image_epochs = 10
-    save_model_epochs = 30
     mixed_precision = "fp16"  # `no` for float32, `fp16` for automatic mixed precision
 
     local_dataset_path = Path("./data/")
@@ -22,8 +18,4 @@ class Configuration:
     seed = 0
     number_of_noise_steps = 5  # Set to 1000 for training
 
-    # These values are overwritten by the Dev / Train Configs
-    train_batch_size = 2
     eval_batch_size = 16
-    num_epochs = 2
-    num_images = 7351

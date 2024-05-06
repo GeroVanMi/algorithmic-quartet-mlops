@@ -1,0 +1,4 @@
+{
+    "name": "similarity-model",
+    "implementation": "server.model"
+}
