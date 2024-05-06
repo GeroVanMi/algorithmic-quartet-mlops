@@ -5,23 +5,23 @@ from google.cloud.storage import Client, transfer_manager
 
 
 def prepare_data(config: Configuration):
-
     num_of_files = len(list(config.local_dataset_path.glob("*")))
+
+    if not config.local_dataset_path.exists() or num_of_files < config.num_images:
+        download_bucket_with_transfer_manager(
+            config.training_bucket_name, max_results=config.num_images
+        )
+
     if isinstance(config, DevConfig):
         print("Testing Training pipeline. This will not train the model!")
         print("In order to train the model, pass the -t or --training flag!")
 
-        if not config.local_dataset_path.exists() or num_of_files < config.num_images:
-            download_bucket_with_transfer_manager(
-                config.training_bucket_name, max_results=config.num_images
-            )
+        return load_dataset(
+            str(config.local_dataset_path.resolve()),
+            split=f"train[0:{config.num_images}]",
+        )
 
-        return load_dataset(str(config.local_dataset_path.resolve()), split="train")
-
-    if not config.local_dataset_path.exists() or num_of_files < config.num_images:
-        download_bucket_with_transfer_manager(config.training_bucket_name)
-
-        return load_dataset(str(config.local_dataset_path.resolve()))
+    return load_dataset(str(config.local_dataset_path.resolve()), split="train")
 
 
 def download_bucket_with_transfer_manager(
@@ -46,8 +46,8 @@ def download_bucket_with_transfer_manager(
     for name, result in zip(blob_names, results):
         if isinstance(result, Exception):
             print("Failed to download {} due to exception: {}".format(name, result))
-        else:
-            print("Downloaded {} to {}.".format(name, destination_directory + name))
+
+    print(f"Downloaded {len(blob_names)} files.")
 
 
 if __name__ == "__main__":

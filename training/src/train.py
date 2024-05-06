@@ -85,7 +85,7 @@ def train_loop(
             }
             progress_bar.set_postfix(**logs)
             accelerator.log(logs, step=global_step)
-            wandb_config.log(logs)
+            wandb_config.log({"loss": logs["loss"]})
             global_step += 1
 
         # After each epoch you optionally sample some demo images with evaluate() and save the model
