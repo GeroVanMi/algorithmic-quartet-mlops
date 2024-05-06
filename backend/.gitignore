@@ -1,3 +1,9 @@
 .metrics/
 .ipynb_checkpoints/
 .envs/
+
+# Model files
+model/
+
+# Images
+predictions/
