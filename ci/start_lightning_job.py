@@ -1,18 +1,14 @@
 import os
 
-from lightning_sdk import Machine
+from lightning_sdk import Machine, Status
 from studio_helper import create_studio
 
 if __name__ == "__main__":
     print("Creating studio instance.")
     studio = create_studio()
 
-    print(studio.status)
-    if studio.status != "Status.Running":
-        print("Starting studio.")
-        studio.start(Machine.T4)
-    else:
-        print("Studio is already running. Not starting it again.")
+    print("Starting studio.")
+    studio.start(Machine.T4)
 
     BASE_PATH = "/teamspace/studios/this_studio/algorithmic-quartet-mlops"
 
