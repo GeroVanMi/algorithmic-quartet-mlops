@@ -13,7 +13,7 @@ class Configuration:
     mixed_precision = "fp16"  # `no` for float32, `fp16` for automatic mixed precision
 
     local_dataset_path = Path("./data/")
-    training_bucket_name = "zhaw_algorithmic_quartet_training_images"
+    training_bucket_name = "zhaw_algorithmic_quartet_training_images_la"
 
     model_name = "pokemon-generator"
     output_dir = f"./models/{model_name}"
