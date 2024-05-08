@@ -1,3 +1,4 @@
+from google.cloud import storage
 import os
 from pathlib import Path
 
@@ -9,6 +10,11 @@ from diffusers.models.unets.unet_2d import UNet2DModel
 from diffusers.pipelines.ddpm.pipeline_ddpm import DDPMPipeline
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 from PIL.Image import Image
+
+from pathlib import Path
+
+from google.cloud.storage import Client, transfer_manager
+
 
 
 # TODO: This code should be imported from `training/src/model/create_model`
@@ -74,6 +80,49 @@ def initialize_pipeline(accelerator, config) -> DDPMPipeline:
     return pipeline.from_pretrained(model_path)  # type: ignore (There are multiple definitions which break the type hints)
 
 
+
+def upload_directory_with_transfer_manager(bucket_name='zhaw_algorithmic_quartet_generated_images', source_directory = './predictions', workers=8):
+    """Upload every file in a directory, including all files in subdirectories.
+
+    Each blob name is derived from the filename, not including the `directory`
+    parameter itself. For complete control of the blob name for each file (and
+    other aspects of individual blob metadata), use
+    transfer_manager.upload_many() instead.
+    """
+
+    storage_client = Client()
+    bucket = storage_client.bucket(bucket_name)
+
+    # First, recursively get all files in `directory` as Path objects.
+    directory_as_path_obj = Path(source_directory)
+    paths = directory_as_path_obj.rglob("*")
+
+    # Filter so the list only includes files, not directories themselves.
+    file_paths = [path for path in paths if path.is_file()]
+
+    # These paths are relative to the current working directory. Next, make them
+    # relative to `directory`
+    relative_paths = [path.relative_to(source_directory) for path in file_paths]
+
+    # Finally, convert them all to strings.
+    string_paths = [str(path) for path in relative_paths]
+
+    print("Found {} files.".format(len(string_paths)))
+
+    # Start the upload.
+    results = transfer_manager.upload_many_from_filenames(
+        bucket, string_paths, source_directory=source_directory, max_workers=workers
+    )
+
+    for name, result in zip(string_paths, results):
+        # The results list is either `None` or an exception for each filename in
+        # the input list, in order.
+
+        if isinstance(result, Exception):
+            print("Failed to upload {} due to exception: {}".format(name, result))
+        else:
+            print("Uploaded {} to {}.".format(name, bucket.name))
+
 def generate_images():
     config = Configuration()
     accelerator = Accelerator(
@@ -94,6 +143,6 @@ def generate_images():
     if isinstance(images, list):
         save_images(images)
 
-
 if __name__ == "__main__":
     generate_images()
+    
