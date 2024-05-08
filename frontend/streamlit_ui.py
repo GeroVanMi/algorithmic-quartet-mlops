@@ -18,16 +18,26 @@ st.subheader('Click on the button to generate new pokemons')
 fs = gcsfs.GCSFileSystem(project='algorithmic-quartet')
 
 # Set the path to the directory containing the images
-directory_path = 'zhaw_algorithmic_quartet_training_images'
+directory_path = 'zhaw_algorithmic_quartet_training_images' # For training purposes 'zhaw_algorithmic_quartet_training_images'
 
-text = "Wow look at these pokemon!"
+text = ["Wow look at these pokemon!",
+"These pokemon are absolutely incredible!",
+"I can't believe how amazing these pokemon are!",
+"Stunning pokemon, I'm in awe!",
+"Absolutely breathtaking pokemon, I'm mesmerized!",
+"These pokemon are truly magnificent, I'm captivated!",
+"Wow, the pokemon here are simply out of this world!",
+"I'm blown away by the beauty and power of these pokemon!",
+"These pokemon are a sight to behold, I'm enthralled!",
+"Incredible pokemon, I'm completely enchanted!"]
+
 def text_stream(text):
     for word in text.split(" "):
         yield word + " "
         time.sleep(0.05)
 
 def display_images():
-    # TODO Think about a workaround so the picutres can be called directly from the model.
+    # TODO Think about a workaround so the picutres can be called directly from the model. / We call it directly from the bucket for now!
     files_info = fs.ls(directory_path, detail=True)
     # Sort files by 'updated' timestamp (most recent first)
     sorted_files = sorted(files_info, key=lambda x: x['updated'], reverse=True)
@@ -51,14 +61,16 @@ def function_to_run_on_click(value):
     # Feedback for current model?
 
 
-# Button to generate / model call! TODO How to call our model?
+# Button to generate / model call! TODO How to call our model? --> solved by
 if st.button('Generate'):
     with st.spinner(text='In progress'):
-        time.sleep(2) # TODO make it depend of the model inference? call server .predict()
-    st.write_stream(text_stream(text))
-    display_images()
-    stars = st_star_rating("Please rate your generated Pokemons", maxValue=5, defaultValue=0, key="rating",
-                           on_click=function_to_run_on_click)
+        #time.sleep(2) # TODO make it depend of the model inference? call server .predict() --> solved
+        random_text = random.choice(text)
+        st.write_stream(text_stream(random_text))
+        display_images()
 
+stars = st_star_rating("Please rate your generated Pokemons", maxValue=5, defaultValue=0, key="rating",
+                               on_click=function_to_run_on_click)
+st.write(stars)
 
 
