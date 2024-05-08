@@ -14,5 +14,5 @@ RUN pip install -r /server/requirements.txt
 ADD . /server
 
 # Run FastAPI server
-CMD ["python", "app.py"]
+CMD ["bash", "start_server.sh"]
 
