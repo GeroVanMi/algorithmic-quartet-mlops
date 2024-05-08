@@ -19,7 +19,6 @@ RUN gcloud auth application-default login lightning-ci@algorithmic-quartet.iam.g
 # Make port 8501 available to the world
 EXPOSE 8501
 
-
 # Run streamlit_ui.py when the container launches
 CMD ["streamlit", "run", "streamlit_ui.py"]
 #CMD ["bash"] # For issue fights
