@@ -10,7 +10,7 @@ def evaluate(config: Configuration, epoch, pipeline):
     images = pipeline(
         batch_size=config.eval_batch_size,
         generator=torch.manual_seed(config.seed),
-        num_inference_steps=config.number_of_noise_steps,  # TODO: This needs to be set via the config and synced with the training equivalent
+        num_inference_steps=config.number_of_noise_steps,
     ).images
 
     test_dir = os.path.join(config.output_dir, "samples")

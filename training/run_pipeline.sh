@@ -9,4 +9,4 @@ mkdir -p ~/.config/gcloud/
 echo $GC_BUCKET_KEY > ~/.config/gcloud/application_default_credentials.json
 gcloud auth application-default login lightning-ci@algorithmic-quartet.iam.gserviceaccount.com
 
-python $PWD/src/pipeline.py -t
+python $PWD/src/pipeline.py 

@@ -1,6 +1,6 @@
 import os
 
-from lightning_sdk import Machine, Status
+from lightning_sdk import Machine
 from studio_helper import create_studio
 
 if __name__ == "__main__":
@@ -8,39 +8,23 @@ if __name__ == "__main__":
     studio = create_studio()
 
     print("Starting studio.")
-    studio.start(Machine.T4)
+    studio.start(machine=Machine.CPU)
 
     BASE_PATH = "/teamspace/studios/this_studio/algorithmic-quartet-mlops"
 
     # Use the jobs plugin
     jobs_plugin = studio.installed_plugins["jobs"]
 
-    # Start the training pipeline on a GPU job
-    # cmd = f"""cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://us-west2-docker.pkg.dev && \
-    # docker run --gpus all us-west2-docker.pkg.dev/algorithmic-quartet/training-pipelines/pokemon-trainer:latest
-    # """
-    # studio.run(f'export WANDB_API_KEY={os.environ.get("WANDB_API_KEY")}')
-    # studio.run(f'export GC_BUCKET_KEY=\'{os.environ.get("GC_BUCKET_KEY")}\'')
-
-    print("Logging into Google Cloud Artifact registry with docker.")
-    studio.run(
-        "cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://us-west2-docker.pkg.dev"
-    )
-
-    print("Running training docker container...")
-    # TODO: The environment variables should be stored in an ENV file and passed to the container like that to prevent them from being logged to the terminal.
-
-    # studio.run(
-    #     f"echo '{os.environ.get('WANDB_API_KEY')}' > ~/.env && echo '{os.environ.get('GC_BUCKET_KEY')}' >> ~/.env"
-    # )
-    studio.run(
-        "docker pull us-west2-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
-    )
-
-    studio.run(
-        f"docker run --gpus all -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' us-west2-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
-    )
-    # studio.run("rm ~/.env")
+    # 1. Log in to the artifact registry
+    # 2. Pull the docker image from the registry
+    # 3. Run the docker container with GPUs and the appropriate environment variables
+    training_command = f"""
+        cat ~/keys/ar-read-only.json | docker login -u _json_key_base64 --password-stdin https://us-west2-docker.pkg.dev && \
+        docker pull us-west2-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest && \
+        docker run --gpus all -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' us-west2-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest
+    """
+    print("Starting studio job.")
+    jobs_plugin.run(command=training_command, name="Traing model", machine=Machine.T4)  # type: ignore
 
     print("Saving state and quitting...")
     studio.stop()
