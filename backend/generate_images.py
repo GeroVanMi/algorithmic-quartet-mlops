@@ -1,5 +1,5 @@
-from google.cloud import storage
 import os
+import time
 from pathlib import Path
 
 import torch
@@ -9,12 +9,9 @@ from Configuration import Configuration
 from diffusers.models.unets.unet_2d import UNet2DModel
 from diffusers.pipelines.ddpm.pipeline_ddpm import DDPMPipeline
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
-from PIL.Image import Image
-
-from pathlib import Path
-
+from google.cloud import storage
 from google.cloud.storage import Client, transfer_manager
-
+from PIL.Image import Image
 
 
 # TODO: This code should be imported from `training/src/model/create_model`
@@ -58,7 +55,8 @@ def save_images(images: list[Image]):
     os.makedirs(predictions_directory, exist_ok=True)
 
     for index, image in enumerate(images):
-        image.save(f"{predictions_directory}/{index:0>2}.png")
+        current_time = time.time()
+        image.save(f"{predictions_directory}/{current_time}_{index:0>2}.png")
 
 
 def initialize_pipeline(accelerator, config) -> DDPMPipeline:
@@ -80,8 +78,11 @@ def initialize_pipeline(accelerator, config) -> DDPMPipeline:
     return pipeline.from_pretrained(model_path)  # type: ignore (There are multiple definitions which break the type hints)
 
 
-
-def upload_directory_with_transfer_manager(bucket_name='zhaw_algorithmic_quartet_generated_images', source_directory = './predictions', workers=8):
+def upload_directory_with_transfer_manager(
+    bucket_name="zhaw_algorithmic_quartet_generated_images",
+    source_directory="./predictions",
+    workers=8,
+):
     """Upload every file in a directory, including all files in subdirectories.
 
     Each blob name is derived from the filename, not including the `directory`
@@ -123,6 +124,7 @@ def upload_directory_with_transfer_manager(bucket_name='zhaw_algorithmic_quartet
         else:
             print("Uploaded {} to {}.".format(name, bucket.name))
 
+
 def generate_images():
     config = Configuration()
     accelerator = Accelerator(
@@ -143,6 +145,6 @@ def generate_images():
     if isinstance(images, list):
         save_images(images)
 
+
 if __name__ == "__main__":
     generate_images()
-    

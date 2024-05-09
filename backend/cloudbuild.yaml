@@ -26,3 +26,15 @@ steps:
         "push",
         "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
       ]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "pokemon-server",
+        "--image",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
+        "--region",
+        "europe-west1",
+      ]
