@@ -13,6 +13,7 @@ RUN pip install -r /server/requirements.txt
 # Copy code
 ADD . /server
 
+EXPOSE 8000
 # Run FastAPI server
 CMD ["bash", "start_server.sh"]
 

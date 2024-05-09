@@ -16,6 +16,6 @@ class Configuration:
 
     overwrite_output_dir = True  # overwrite the old model when re-running the notebook
     seed = 0
-    number_of_noise_steps = 100  # Set to 1000 for training
+    number_of_noise_steps = 2  # Set to 1000 for training
 
-    eval_batch_size = 16
+    eval_batch_size = 2
