@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: ./backend
+    container_name: fastapi_container
+    ports:
+      - "8000:8000"
+    environment:
+      - CLOUD_BUCKET=${CLOUD_BUCKET}
+      - WANDB_API_KEY=${WANDB_API_KEY}
+    networks:
+      - mynetwork
+
+  streamlit:
+    build:
+      context: ./frontend
+    container_name: streamlit_container
+    ports:
+      - "8501:8501"
+    environment:
+      - CLOUD_BUCKET=${CLOUD_BUCKET}
+    depends_on:
+      - fastapi
+    networks:
+      - mynetwork
+
+
+networks:
+  mynetwork:
+    driver: bridge
