@@ -5,7 +5,7 @@ steps:
     args:
       [
         "-c",
-        "docker pull europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server:latest || exit 0",
+        "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server:latest || exit 0",
       ]
   - name: "gcr.io/cloud-builders/docker"
     id: BuildFastAPI
@@ -14,9 +14,9 @@ steps:
       [
         "build",
         "-t",
-        "europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
         "--cache-from",
-        "europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server:latest",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server:latest",
         ".",
       ]
   - name: "gcr.io/cloud-builders/docker"
@@ -24,5 +24,5 @@ steps:
     args:
       [
         "push",
-        "europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
       ]
