@@ -60,14 +60,13 @@ def function_to_run_on_click(value):
     st.write(f"You gave the Pokemons **{value}** stars!")
     # Feedback for current model?
 
-
 # Button to generate / model call!
 if st.button('Generate'):
     with st.spinner(text='In progress'):
         random_text = random.choice(text)
         st.write_stream(text_stream(random_text))
         try:
-            response = requests.get('http://fastapi_container:8000/generate_images')
+            response = requests.get('https://pokemon-server-ukwlkels3q-ew.a.run.app/generate_images')
             response.raise_for_status()
             display_images()
         except requests.exceptions.RequestException as e:
