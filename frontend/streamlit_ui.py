@@ -42,12 +42,12 @@ def display_images():
     # Sort files by 'updated' timestamp (most recent first)
     sorted_files = sorted(files_info, key=lambda x: x['updated'], reverse=True)
     # Select the top 4 most recently updated files
-    recent_files = sorted_files[:4]
+    recent_files = sorted_files[:2]
     # Randomly select 4 unique files from the list just for testing purposes
-    random_files = random.sample(files_info, 4)
+    #random_files = random.sample(files_info, 4)
 
     images = []
-    for file_info in random_files:#recent_files:
+    for file_info in recent_files
         with fs.open(file_info['name'], mode='rb') as f:
             img = f.read()
             images.append(img)
