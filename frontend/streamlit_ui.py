@@ -3,7 +3,7 @@ import gcsfs
 import time
 import random
 from streamlit_star_rating import st_star_rating
-
+import requests
 
 st.set_page_config(
     page_title="Pokemon Generator",
@@ -18,7 +18,7 @@ st.subheader('Click on the button to generate new pokemons')
 fs = gcsfs.GCSFileSystem(project='algorithmic-quartet')
 
 # Set the path to the directory containing the images
-directory_path = 'zhaw_algorithmic_quartet_training_images' # For training purposes 'zhaw_algorithmic_quartet_training_images'
+directory_path = 'zhaw_algorithmic_quartet_generated_images' # For training purposes 'zhaw_algorithmic_quartet_training_images'
 
 text = ["Wow look at these pokemon!",
 "These pokemon are absolutely incredible!",
@@ -61,16 +61,20 @@ def function_to_run_on_click(value):
     # Feedback for current model?
 
 
-# Button to generate / model call! TODO How to call our model? --> solved by
+# Button to generate / model call!
 if st.button('Generate'):
     with st.spinner(text='In progress'):
-        #time.sleep(2) # TODO make it depend of the model inference? call server .predict() --> solved
         random_text = random.choice(text)
         st.write_stream(text_stream(random_text))
-        display_images()
+        try:
+            response = requests.get('http://fastapi_container:8000/generate_images')
+            response.raise_for_status()
+            display_images()
+        except requests.exceptions.RequestException as e:
+            st.error(f"An error occurred: {e}")
 
-stars = st_star_rating("Please rate your generated Pokemons", maxValue=5, defaultValue=0, key="rating",
-                               on_click=function_to_run_on_click)
-st.write(stars)
+        stars = st_star_rating("Please rate your generated Pokemons", maxValue=5, defaultValue=0, key="rating",
+                                       on_click=function_to_run_on_click)
+        st.write(stars)
 
 

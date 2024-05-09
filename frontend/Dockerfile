@@ -13,12 +13,9 @@ ADD requirements.txt /frontend
 RUN pip install -r requirements.txt
 ADD . /frontend
 RUN mkdir -p ~/.config/gcloud
-RUN cp keys/gc.json ~/.config/gcloud/application_default_credentials.json
-RUN gcloud auth application-default login lightning-ci@algorithmic-quartet.iam.gserviceaccount.com
 
 # Make port 8501 available to the world
 EXPOSE 8501
 
 # Run streamlit_ui.py when the container launches
-CMD ["streamlit", "run", "streamlit_ui.py"]
-#CMD ["bash"] # For issue fights
+CMD ["bash", "start_streamlit.sh"]

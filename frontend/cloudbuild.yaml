@@ -1,0 +1,28 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    id: PullStreamlitCache
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "docker pull europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-ui:latest || exit 0",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: BuildStreamlit
+    dir: "./frontend"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-ui",
+        "--cache-from",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-ui:latest",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: PushStreamlit
+    args:
+      [
+        "push",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-ui",
+      ]
