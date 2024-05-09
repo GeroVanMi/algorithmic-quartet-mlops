@@ -1,0 +1,28 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    id: PullFastAPICache
+    entrypoint: "bash"
+    args:
+      [
+        "-c",
+        "docker pull europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server:latest || exit 0",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: BuildFastAPI
+    dir: "./backend"
+    args:
+      [
+        "build",
+        "-t",
+        "europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
+        "--cache-from",
+        "europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server:latest",
+        ".",
+      ]
+  - name: "gcr.io/cloud-builders/docker"
+    id: PushFastAPI
+    args:
+      [
+        "push",
+        "europe-west9-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
+      ]
