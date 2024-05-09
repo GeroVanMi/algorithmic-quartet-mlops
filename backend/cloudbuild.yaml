@@ -27,6 +27,7 @@ steps:
         "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
       ]
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: UpdateCloudRun
     entrypoint: gcloud
     args:
       [
@@ -34,7 +35,7 @@ steps:
         "deploy",
         "pokemon-server",
         "--image",
-        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-server:latest",
         "--region",
         "europe-west1",
       ]
