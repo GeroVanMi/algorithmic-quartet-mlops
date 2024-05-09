@@ -47,7 +47,7 @@ def display_images():
     #random_files = random.sample(files_info, 4)
 
     images = []
-    for file_info in recent_files
+    for file_info in recent_files:
         with fs.open(file_info['name'], mode='rb') as f:
             img = f.read()
             images.append(img)
