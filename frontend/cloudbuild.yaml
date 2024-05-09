@@ -26,3 +26,16 @@ steps:
         "push",
         "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-ui",
       ]
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: UpdateCloudRun
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "pokemon-ui",
+        "--image",
+        "europe-west1-docker.pkg.dev/$PROJECT_ID/pokemon-server-images/pokemon-ui:latest",
+        "--region",
+        "europe-west1",
+      ]
