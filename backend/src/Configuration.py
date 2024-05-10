@@ -8,11 +8,14 @@ class Configuration:
     gradient_accumulation_steps = 1
     mixed_precision = "fp16"  # `no` for float32, `fp16` for automatic mixed precision
 
-    local_dataset_path = Path("./data/")
-    training_bucket_name = "zhaw_algorithmic_quartet_training_images"
+    project_dir = Path(__file__).parents[1]
+
+    wandb_project = "Training"
+    wandb_entity = "algorithmic-quartet-zhaw"
 
     model_name = "pokemon-generator"
-    output_dir = f"./models/{model_name}"
+    artifact_name = f"{wandb_entity}/model-registry/{model_name}:latest"
+    output_dir = project_dir.joinpath(f"models/{model_name}")
 
     overwrite_output_dir = True  # overwrite the old model when re-running the notebook
     seed = 0

@@ -1,29 +1,19 @@
-# 1. Library imports
-import uvicorn
 from fastapi import FastAPI
-# from model import IrisModel, IrisSpecies
-from generate_images import *
+from src.Configuration import Configuration
+from src.download_pipeline import download_pipeline_files
+from src.generate_images import *
+from src.save_model_rating import wandb_rate_model
 
-# 2. Create app and model objects
 app = FastAPI()
 config = Configuration()
-# model = IrisModel()
-model = create_model(config)
 
-# 3. Expose the prediction functionality, make a prediction from the passed
-#    JSON data and return the predicted flower species with the confidence
-""" Example:
-@app.post('/predict')
-def predict_species(iris: IrisSpecies):
-    data = iris.dict()
-    prediction, probability = model.predict_species(
-        data['sepal_length'], data['sepal_width'], data['petal_length'], data['petal_width']
-    )
-    return {
-        'prediction': prediction,
-        'probability': probability
-    }
-"""
+model_id = download_pipeline_files(config)
+
+
+@app.post("/rate_model")
+def rate_model(rating: int):
+    wandb_rate_model(model_id, rating, config)
+    return "Rating submitted."
 
 
 @app.get("/generate_images")
@@ -48,8 +38,4 @@ def generate_images():
         save_images(images)
         upload_directory_with_transfer_manager()
 
-
-# 4. Run the API with uvicorn
-#    Will run on http://127.0.0.1:8000
-# if __name__ == '__main__':
-#     uvicorn.run(app, host='127.0.0.1', port=8001)
+    return model_id

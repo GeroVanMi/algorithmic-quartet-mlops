@@ -1,6 +1,7 @@
 .metrics/
 .ipynb_checkpoints/
 .envs/
+.env*
 
 # Model files
 model/
