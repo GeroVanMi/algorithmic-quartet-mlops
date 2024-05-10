@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 from src.Configuration import Configuration
 from src.download_pipeline import download_pipeline_files
 from src.generate_images import *
@@ -10,9 +11,13 @@ config = Configuration()
 model_id = download_pipeline_files(config)
 
 
+class RatingBody(BaseModel):
+    rating: int
+
+
 @app.post("/rate_model")
-def rate_model(rating: int):
-    wandb_rate_model(model_id, rating, config)
+def rate_model(rating: RatingBody):
+    wandb_rate_model(model_id, rating.rating, config)
     return "Rating submitted."
 
 

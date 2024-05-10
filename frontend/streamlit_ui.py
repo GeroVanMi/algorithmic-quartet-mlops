@@ -6,6 +6,8 @@ import requests
 import streamlit as st
 from streamlit_star_rating import st_star_rating
 
+SERVER_URL = "https://pokemon-server-ukwlkels3q-ew.a.run.app/generate_images"
+
 st.set_page_config(
     page_title="Pokemon Generator",
     page_icon="./pika.png",
@@ -52,11 +54,13 @@ def display_images():
             img = f.read()
             images.append(img)
 
-    st.image(images, width=300)
+    with st.container():
+        st.image(images, width=300)
 
 
 def handle_user_rating(value):
     st.markdown(f"You gave the Pokemons **{value}** stars!")
+    requests.post(f"{SERVER_URL}/rate_model", json={"rating": value})
 
 
 def display_stars():
@@ -71,17 +75,16 @@ def display_stars():
 
 
 # Button to generate / model call!
-if st.button("Generate"):
+if st.button("Generate new Images"):
     with st.spinner(text="Generating contemporary art!"):
         random_text = random.choice(text)
         try:
-            response = requests.get(
-                "https://pokemon-server-ukwlkels3q-ew.a.run.app/generate_images"
-            )
+            response = requests.get(f"{SERVER_URL}/generate_images")
             response.raise_for_status()
-            st.write_stream(text_stream(random_text))
-            display_images()
         except requests.exceptions.RequestException as e:
             st.error(f"An error occurred: {e}")
 
+    st.write_stream(text_stream(random_text))
+
+display_images()
 display_stars()
