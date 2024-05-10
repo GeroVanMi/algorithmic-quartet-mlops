@@ -6,7 +6,7 @@ import requests
 import streamlit as st
 from streamlit_star_rating import st_star_rating
 
-SERVER_URL = "https://pokemon-server-ukwlkels3q-ew.a.run.app/generate_images"
+SERVER_URL = "https://pokemon-server-ukwlkels3q-ew.a.run.app/"
 
 st.set_page_config(
     page_title="Pokemon Generator",
