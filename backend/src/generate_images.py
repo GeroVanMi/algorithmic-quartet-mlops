@@ -5,6 +5,7 @@ from pathlib import Path
 import torch
 from accelerate import Accelerator
 from diffusers.pipelines.ddpm.pipeline_ddpm import DDPMPipeline
+from diffusers.pipelines.pipeline_utils import DiffusionPipeline
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 from google.cloud.storage import Client, transfer_manager
 from PIL.Image import Image
@@ -22,7 +23,7 @@ def save_images(images: list[Image]):
         image.save(f"{predictions_directory}/{current_time}_{index:0>2}.png")
 
 
-def initialize_pipeline(accelerator, config) -> DDPMPipeline:
+def initialize_pipeline(accelerator, config) -> DiffusionPipeline:
     """
     Creates the DDPMScheduler pipeline and either downloads it or loads it directly from disk.
     """
@@ -34,7 +35,7 @@ def initialize_pipeline(accelerator, config) -> DDPMPipeline:
     pipeline = DDPMPipeline(
         unet=accelerator.unwrap_model(model), scheduler=noise_scheduler
     )
-    return pipeline.from_pretrained(config.output_dir)  # type: ignore (There are multiple definitions which break the type hints)
+    return pipeline.from_pretrained(config.output_dir, torch_dtype=torch.float16)
 
 
 def upload_directory_with_transfer_manager(
