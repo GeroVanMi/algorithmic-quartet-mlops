@@ -35,7 +35,7 @@ def initialize_pipeline(accelerator, config) -> DiffusionPipeline:
     pipeline = DDPMPipeline(
         unet=accelerator.unwrap_model(model), scheduler=noise_scheduler
     )
-    return pipeline.from_pretrained(config.output_dir, torch_dtype=torch.float16)
+    return pipeline.from_pretrained(config.output_dir)
 
 
 def upload_directory_with_transfer_manager(
