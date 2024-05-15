@@ -71,10 +71,12 @@ steps:
       - PushLightningExecutor
       - PushTrainingPipeline
     entrypoint: "bash"
+    env:
+      - "TAG_NAME=$TAG_NAME"
     args:
       [
         "-c",
-        "docker run -i -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO -e WANDB_API_KEY -e GC_BUCKET_KEY us-west2-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest",
+        "docker run -i -e TAG_NAME -e LIGHTNING_API_KEY -e LIGHTNING_USER_ID -e LIGHTNING_ORGANIZATION -e LIGHTNING_TEAMSPACE -e LIGHTNING_STUDIO -e WANDB_API_KEY -e GC_BUCKET_KEY us-west2-docker.pkg.dev/$PROJECT_ID/training-images/lightning-executor:latest",
       ]
     secretEnv:
       [
