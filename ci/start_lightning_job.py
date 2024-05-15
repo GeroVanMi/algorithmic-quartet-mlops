@@ -8,7 +8,7 @@ if __name__ == "__main__":
     studio = create_studio()
 
     print("Starting studio.")
-    studio.start(Machine.T4)
+    studio.start(Machine.T4_X_4)
 
     BASE_PATH = "/teamspace/studios/this_studio/algorithmic-quartet-mlops"
 
@@ -28,5 +28,5 @@ if __name__ == "__main__":
     )
 
     studio.run(
-        f"docker run -d --gpus all -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' us-west2-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
+        f"docker run -d --gpus all -e TAG_NAME -e WANDB_API_KEY='{os.environ.get('WANDB_API_KEY')}' -e GC_BUCKET_KEY='{os.environ.get('GC_BUCKET_KEY')}' us-west2-docker.pkg.dev/algorithmic-quartet/training-images/pokemon-trainer:latest"
     )

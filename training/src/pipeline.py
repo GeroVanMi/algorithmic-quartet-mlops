@@ -1,10 +1,8 @@
+import os
+
 import torch
-from configurations import (
-    Configuration,
-    TrainConfig,
-    WandB,
-    create_config_from_arguments,
-)
+from configurations import (Configuration, TrainConfig, WandB,
+                            create_config_from_arguments)
 from data_utilities.cloud_bucket import prepare_data
 from diffusers.optimization import get_cosine_schedule_with_warmup
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
@@ -21,7 +19,14 @@ def run_pipeline(config: Configuration):
         entity="algorithmic-quartet-zhaw",
         mode="training",
     )
-    wandb_config.create_run("Train Model")
+
+    training_name = os.environ.get("TAG_NAME")
+    if training_name is None:
+        training_name = "Train Model"
+    else:
+        training_name = training_name.split("/")[1]
+
+    wandb_config.create_run(training_name)
 
     preprocess = transforms.Compose(
         [

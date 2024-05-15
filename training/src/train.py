@@ -91,7 +91,8 @@ def train_loop(
         # After each epoch you optionally sample some demo images with evaluate() and save the model
         if accelerator.is_main_process:
             pipeline = DDPMPipeline(
-                unet=accelerator.unwrap_model(model), scheduler=noise_scheduler
+                unet=accelerator.unwrap_model(model),
+                scheduler=noise_scheduler,
             )
 
             if (
