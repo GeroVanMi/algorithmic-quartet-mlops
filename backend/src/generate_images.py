@@ -99,7 +99,7 @@ def generate_images():
 
     images = image_generation_pipeline(
         batch_size=config.eval_batch_size,
-        generator=torch.manual_seed(config.seed),
+        generator=torch.Generator(),
         num_inference_steps=config.number_of_noise_steps,
     ).images  # type: ignore (There are multiple definitions which break the type hints)
 
