@@ -45,7 +45,7 @@ def text_stream(text):
 def display_images():
     files_info = fs.ls(directory_path, detail=True)
     # Sort files by 'updated' timestamp (most recent first)
-    sorted_files = sorted(files_info, key=lambda x: x["updated"], reverse=True)
+    sorted_files = sorted(files_info, key=lambda x: x["timeCreated"], reverse=True)
     recent_files = sorted_files[:2]
 
     images = []
