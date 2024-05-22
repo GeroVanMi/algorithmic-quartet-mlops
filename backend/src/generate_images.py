@@ -1,4 +1,5 @@
 import os
+import random
 import time
 from pathlib import Path
 
@@ -12,6 +13,8 @@ from PIL.Image import Image
 from src.Configuration import Configuration
 from src.create_model import create_model
 from src.download_pipeline import download_pipeline_files
+
+generator = torch.Generator()
 
 
 def save_images(images: list[Image]):
@@ -86,8 +89,7 @@ def upload_directory_with_transfer_manager(
             print("Uploaded {} to {}.".format(name, bucket.name))
 
 
-def generate_images():
-    config = Configuration()
+def generate_images(config):
     accelerator = Accelerator(
         mixed_precision=config.mixed_precision,
         gradient_accumulation_steps=config.gradient_accumulation_steps,
@@ -99,13 +101,13 @@ def generate_images():
 
     images = image_generation_pipeline(
         batch_size=config.eval_batch_size,
-        generator=torch.Generator(),
+        generator=generator,
         num_inference_steps=config.number_of_noise_steps,
     ).images  # type: ignore (There are multiple definitions which break the type hints)
 
-    if isinstance(images, list):
-        save_images(images)
+    return images
 
 
 if __name__ == "__main__":
-    generate_images()
+    config = Configuration()
+    generate_images(config)

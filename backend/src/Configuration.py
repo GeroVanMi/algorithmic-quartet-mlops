@@ -18,7 +18,6 @@ class Configuration:
     output_dir = project_dir.joinpath(f"models/{model_name}")
 
     overwrite_output_dir = True  # overwrite the old model when re-running the notebook
-    seed = 0
-    number_of_noise_steps = 10  # Set to 1000 for training
+    number_of_noise_steps = 15  # Set to 1000 for training
 
     eval_batch_size = 2
